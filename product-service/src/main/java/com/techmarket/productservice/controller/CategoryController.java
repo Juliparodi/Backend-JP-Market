@@ -1,6 +1,9 @@
 package com.techmarket.productservice.controller;
 
+import com.techmarket.productservice.model.dto.CategoryDTO;
 import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.PromotionDTO;
+import com.techmarket.productservice.service.ICategoryService;
 import com.techmarket.productservice.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,23 +13,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/techMarket/product")
+@RequestMapping("/api/techMarket/category")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class ProductController {
+public class CategoryController {
 
-    private final IProductService productService;
+    private final ICategoryService categoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody @Valid ProductoDTO productRequest) {
-        productService.createProduct(productRequest);
+    public void createProduct(@RequestBody @Valid CategoryDTO categoryDTO) {
+        categoryService.createCategory(categoryDTO);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductoDTO> getAllProducts() {
-        return productService.getAllProducts();
+    public List<CategoryDTO> getAllProducts() {
+        return categoryService.getAllCategories();
     }
-
 }

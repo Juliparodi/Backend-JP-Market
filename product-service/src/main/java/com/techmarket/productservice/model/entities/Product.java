@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Document(value = "product")
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class Product {
     private ObjectId id;
     private String name;
     private String nameWithDetail;
-    private String category;
+    private ObjectId category;
     private Integer stock;
     private String img;
     private BigDecimal price;
@@ -32,4 +33,5 @@ public class Product {
     private LocalDate creationDate;
     @LastModifiedDate
     private LocalDate modifiedDate;
+    private List<Variation> variations;
 }

@@ -1,7 +1,10 @@
 package com.techmarket.productservice.controller;
 
 import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.PromotionDTO;
+import com.techmarket.productservice.model.entities.Promotion;
 import com.techmarket.productservice.service.IProductService;
+import com.techmarket.productservice.service.IPromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,23 +13,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/techMarket/product")
+@RequestMapping("/api/techMarket/promotion")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class ProductController {
+public class PromotionController {
 
-    private final IProductService productService;
+    private final IPromotionService promotionService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody @Valid ProductoDTO productRequest) {
-        productService.createProduct(productRequest);
+    public void createProduct(@RequestBody @Valid PromotionDTO promotionDTO) {
+        promotionService.createPromotion(promotionDTO);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductoDTO> getAllProducts() {
-        return productService.getAllProducts();
+    public List<PromotionDTO> getAllProducts() {
+        return promotionService.getAllPromotions();
     }
-
 }

@@ -43,7 +43,7 @@ public class ProductServiceImpl implements IProductService {
                 .nameWithDetail(product.getNameWithDetail())
                 .stock(product.getStock())
                 .price(product.getPrice())
-                .category(String.valueOf(new ObjectId("20")))
+                .category(product.getCategory().toHexString())
                 .img(product.getImg())
                 .build();
     }

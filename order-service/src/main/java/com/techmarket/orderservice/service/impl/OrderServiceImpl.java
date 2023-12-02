@@ -27,8 +27,7 @@ import java.util.UUID;
 public class OrderServiceImpl implements IOrderService {
 
     private final OrderRepository orderRepository;
-    @Autowired
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     private final static String SKU_CODE = "skuCode";
 
     @Value("${inventory.url}")
@@ -58,13 +57,18 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     private boolean productIsInStock(List<String> skuCodes) {
-        List<InventoryResponse> inventoryResponsesList = webClient.get()
-                .uri(INVENTORY_URL,
-                        uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
-                .retrieve()
-                .bodyToFlux(InventoryResponse.class)
-                .collectList()
-                .block();
+        List<InventoryResponse> inventoryResponsesList;
+        try {
+            inventoryResponsesList = webClientBuilder.build().get()
+                    .uri(INVENTORY_URL,
+                            uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
+                    .retrieve()
+                    .bodyToFlux(InventoryResponse.class)
+                    .collectList()
+                    .block();
+        } catch (Exception ex) {
+            throw new RuntimeException("Unexpected error occurred", ex);
+        }
 
         if (inventoryResponsesList == null || inventoryResponsesList.isEmpty()) {
            throw new NoInventoriesException();

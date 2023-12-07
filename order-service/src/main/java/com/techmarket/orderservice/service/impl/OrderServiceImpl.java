@@ -20,6 +20,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.UUID;
 
+import static com.techmarket.orderservice.constants.Constants.SKU_CODE;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,7 +30,6 @@ public class OrderServiceImpl implements IOrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
-    private final static String SKU_CODE = "skuCode";
 
     @Value("${inventory.url}")
     private String INVENTORY_URL;
@@ -59,13 +60,7 @@ public class OrderServiceImpl implements IOrderService {
     private boolean productIsInStock(List<String> skuCodes) {
         List<InventoryResponse> inventoryResponsesList;
         try {
-            inventoryResponsesList = webClientBuilder.build().get()
-                    .uri(INVENTORY_URL,
-                            uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
-                    .retrieve()
-                    .bodyToFlux(InventoryResponse.class)
-                    .collectList()
-                    .block();
+            inventoryResponsesList = getInventoryResponse(skuCodes);
         } catch (Exception ex) {
             throw new RuntimeException("Unexpected error occurred", ex);
         }
@@ -76,6 +71,16 @@ public class OrderServiceImpl implements IOrderService {
 
         return inventoryResponsesList.stream()
                 .allMatch(InventoryResponse::getIsInStock);
+    }
+
+    private List<InventoryResponse> getInventoryResponse(List<String> skuCodes) {
+        return webClientBuilder.build().get()
+                .uri(INVENTORY_URL,
+                        uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
+                .retrieve()
+                .bodyToFlux(InventoryResponse.class)
+                .collectList()
+                .block();
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDTO orderLineItemsDto) {

@@ -10,25 +10,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
-import static com.techmarket.orderservice.exceptions.constants.ExceptionConstants.NO_INVENTORIES_MESSAGE;
-import static com.techmarket.orderservice.exceptions.constants.ExceptionConstants.NO_STOCK_MESSAGE;
+import static com.techmarket.orderservice.constants.ExceptionConstants.NO_INVENTORIES_MESSAGE;
+import static com.techmarket.orderservice.constants.ExceptionConstants.NO_STOCK_MESSAGE;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoStockException.class)
-    public ResponseEntity<String> handleSuperHeroNotFoundException(NoStockException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_STOCK_MESSAGE);
-    }
-
-    @ExceptionHandler(NoInventoriesException.class)
-    public ResponseEntity<String> handleSuperHeroNotFoundException(NoInventoriesException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_INVENTORIES_MESSAGE);
+    @ExceptionHandler({NoStockException.class, NoInventoriesException.class})
+    public ResponseEntity<String> handleSuperHeroNotFoundException(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("holi");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 
     @ExceptionHandler({ValidationException.class, ConstraintViolationException.class})
@@ -36,7 +31,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class,})
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
         FieldError fieldError = ex.getBindingResult().getFieldErrors().get(0);
         String errorMessage = fieldError.getDefaultMessage();

@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class ProductServiceApplication {
 	}
 
 	@Bean
+	@Profile("!test")
 	public CommandLineRunner loadData(ProductRepository productRepository, CategoryRepository categoryRepository,
 									  PromotionRepository promotionRepository) {
 		return args -> {

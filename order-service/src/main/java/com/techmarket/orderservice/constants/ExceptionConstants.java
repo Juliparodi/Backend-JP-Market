@@ -1,4 +1,4 @@
-package com.techmarket.orderservice.exceptions.constants;
+package com.techmarket.orderservice.constants;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

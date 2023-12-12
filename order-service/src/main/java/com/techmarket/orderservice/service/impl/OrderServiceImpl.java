@@ -46,9 +46,8 @@ public class OrderServiceImpl implements IOrderService {
         return order;
     }
 
-    public String saveOrder(Order order) {
+    public void saveOrder(Order order) {
         orderRepository.save(order);
-        return "Order placed successfully";
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDTO orderLineItemsDto) {

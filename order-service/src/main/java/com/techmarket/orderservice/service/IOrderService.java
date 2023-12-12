@@ -8,6 +8,6 @@ import java.util.List;
 public interface IOrderService {
 
     Order createOrder(OrderRequestDTO orderRequest);
-    String saveOrder(Order order);
+    void saveOrder(Order order);
     List<String> extractSkuCodes(Order order);
 }

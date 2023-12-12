@@ -12,10 +12,14 @@ import com.techmarket.orderservice.service.IOrderService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,58 +33,22 @@ import static com.techmarket.orderservice.constants.Constants.SKU_CODE;
 public class OrderServiceImpl implements IOrderService {
 
     private final OrderRepository orderRepository;
-    private final WebClient.Builder webClientBuilder;
 
-    @Value("${inventory.url}")
-    private String INVENTORY_URL;
-
-    public void placeOrder(OrderRequestDTO orderRequest) {
+    @Override
+    public Order createOrder(OrderRequestDTO orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
-
         List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
                 .stream()
                 .map(this::mapToDto)
                 .toList();
-
         order.setOrderLineItemsList(orderLineItems);
+        return order;
+    }
 
-        List<String> skuCodes = order.getOrderLineItemsList()
-                .stream()
-                .map(OrderLineItems::getSkuCode)
-                .toList();
-
-        if (!productIsInStock(skuCodes)) {
-            throw new NoStockException();
-        }
-
+    public String saveOrder(Order order) {
         orderRepository.save(order);
-    }
-
-    private boolean productIsInStock(List<String> skuCodes) {
-        List<InventoryResponse> inventoryResponsesList;
-        try {
-            inventoryResponsesList = getInventoryResponse(skuCodes);
-        } catch (Exception ex) {
-            throw new RuntimeException("Unexpected error occurred", ex);
-        }
-
-        if (inventoryResponsesList == null || inventoryResponsesList.isEmpty()) {
-           throw new NoInventoriesException();
-        }
-
-        return inventoryResponsesList.stream()
-                .allMatch(InventoryResponse::getIsInStock);
-    }
-
-    private List<InventoryResponse> getInventoryResponse(List<String> skuCodes) {
-        return webClientBuilder.build().get()
-                .uri(INVENTORY_URL,
-                        uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
-                .retrieve()
-                .bodyToFlux(InventoryResponse.class)
-                .collectList()
-                .block();
+        return "Order placed successfully";
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDTO orderLineItemsDto) {
@@ -89,5 +57,12 @@ public class OrderServiceImpl implements IOrderService {
         orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
         orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
         return orderLineItems;
+    }
+
+    public List<String> extractSkuCodes(Order order) {
+        return order.getOrderLineItemsList()
+                .stream()
+                .map(OrderLineItems::getSkuCode)
+                .toList();
     }
 }

@@ -7,6 +7,7 @@ import com.techmarket.productservice.repository.CategoryRepository;
 import com.techmarket.productservice.repository.ProductRepository;
 import com.techmarket.productservice.service.IProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ProductServiceImpl implements IProductService {
 
     private final ProductRepository productRepository;
@@ -32,9 +34,9 @@ public class ProductServiceImpl implements IProductService {
                 .price(productRequest.getPrice())
                 .category(categoryOptional.get().getId())
                 .img(productRequest.getImg())
-
                 .build();
 
+        log.info("product saved");
         productRepository.save(product);
     }
 

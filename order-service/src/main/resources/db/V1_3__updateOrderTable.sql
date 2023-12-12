@@ -1,0 +1,2 @@
+ALTER TABLE t_orders
+ADD COLUMN created_date TIMESTAMP;

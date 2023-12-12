@@ -5,6 +5,7 @@ import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.exceptions.NoInventoriesException;
 import com.techmarket.orderservice.exceptions.NoStockException;
 import com.techmarket.orderservice.repository.OrderRepository;
+import com.techmarket.orderservice.service.impl.OrderProccessingServiceImpl;
 import com.techmarket.orderservice.service.impl.OrderServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -40,7 +41,7 @@ public class OrderServiceTest {
     private WebClient.Builder webClientBuilder;
 
     @InjectMocks
-    private OrderServiceImpl orderService;
+    private OrderProccessingServiceImpl orderProccessingService;
 
     private String INVENTORY_URL;
 
@@ -73,7 +74,7 @@ public class OrderServiceTest {
                         "]")
                 .addHeader("Content-Type", "application/json"));
 
-        orderService.placeOrder(orderRequest);
+        orderProccessingService.placeOrder(orderRequest);
 
         verify(orderRepository, times(1)).save(any());
     }
@@ -95,7 +96,7 @@ public class OrderServiceTest {
                         "]")
                 .addHeader("Content-Type", "application/json"));
 
-        assertThrows(NoStockException.class, () -> orderService.placeOrder(orderRequest));
+        assertThrows(NoStockException.class, () -> orderProccessingService.placeOrder(orderRequest));
 
         verify(orderRepository, never()).save(any());
     }
@@ -112,7 +113,7 @@ public class OrderServiceTest {
                 .setBody("[]")
                 .addHeader("Content-Type", "application/json"));
 
-        assertThrows(NoInventoriesException.class, () -> orderService.placeOrder(orderRequest));
+        assertThrows(NoInventoriesException.class, () -> orderProccessingService.placeOrder(orderRequest));
 
         verify(orderRepository, never()).save(any());
     }

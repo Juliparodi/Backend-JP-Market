@@ -1,0 +1,8 @@
+# Ignore specific files
+.git
+node_modules
+*.log
+
+# Ignore specific directories
+logs
+temp

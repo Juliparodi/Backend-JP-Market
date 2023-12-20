@@ -8,11 +8,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static com.techmarket.orderservice.constants.Constants.SKU_CODE;
@@ -54,7 +59,10 @@ public class IInventoryServiceImpl implements IInventoryService {
     }
 
     private List<InventoryResponse> getInventoryResponse(List<String> skuCodes) {
-        return webClientBuilder.build().get()
+
+
+        return webClientBuilder
+                .build().get()
                 .uri(INVENTORY_URL, uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())
                 .retrieve()
                 .bodyToFlux(InventoryResponse.class)

@@ -52,16 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        return new InMemoryUserDetailsManager(User.withUsername("admin")
-                .password(passwordEncoder.encode(password))
-                .authorities("USER")
-                .build());
-    }
-
-    @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

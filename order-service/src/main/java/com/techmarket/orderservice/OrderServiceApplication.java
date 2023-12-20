@@ -11,9 +11,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @Data
 public class OrderServiceApplication {
 
-	@Value("${spring.datasource.password}")
-	private static String password;
-
 	public static void main(String[] args) {
 		SpringApplication.run(OrderServiceApplication.class, args);
 	}

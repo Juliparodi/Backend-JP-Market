@@ -8,7 +8,6 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer
 public class DiscoveryServerApplication {
     public static void main(String[] args) {
-        System.out.println("env" + System.getenv());
         SpringApplication.run(DiscoveryServerApplication.class, args);
     }
 }

@@ -1,19 +1,20 @@
 package com.techmarket.orderservice.integration;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.techmarket.orderservice.repository.OrderRepository;
 import com.techmarket.orderservice.utils.JsonConverter;
-import com.zaxxer.hikari.HikariDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,8 +24,10 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import javax.sql.DataSource;
 
+import java.io.IOException;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Testcontainers
@@ -40,6 +43,8 @@ public class OrderIntegrationTests {
             .withPassword("AVNS_ViMLlH4Ah3IR23tl_T1")
             .withInitScript("sql/init.sql");
 
+    private WireMockServer wireMockServer;
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -54,8 +59,29 @@ public class OrderIntegrationTests {
         registry.add("spring.datasource.password", mySQLContainer::getPassword);
     }
 
+    @BeforeEach
+    public void setup() throws IOException {
+        wireMockServer = new WireMockServer(8089); // Change WireMock port
+        WireMock.configureFor("localhost", 8089);
+        wireMockServer.start();
+        stubFor(get(urlEqualTo("/api/techMarket/inventory?skuCode=iphone_13"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(JsonConverter.loadJsonFromFile("inventory-response.json"))));
+
+    }
+
+    @AfterEach
+    public void teardown() {
+        if (wireMockServer != null) {
+            wireMockServer.stop();
+        }
+    }
+
     @Test
     void whenSavingOrderWithProductsWithStock_thenReturnCreated() throws Exception {
+
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/techMarket/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,5 +100,6 @@ public class OrderIntegrationTests {
                         .content(JsonConverter.loadJsonFromFile("order-no-stock.json")))
                 .andExpect(status().isBadRequest());
     }
+
 
 }

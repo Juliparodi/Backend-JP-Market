@@ -1,4 +1,4 @@
-package com.techmarket.productservice.integration;
+package org.techmarket;
 
 import com.techmarket.productservice.repository.ProductRepository;
 import com.techmarket.productservice.utils.JsonConverter;

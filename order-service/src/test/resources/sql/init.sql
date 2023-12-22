@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS order_line_items;
 CREATE TABLE `t_orders` (
                             `order_id` bigint NOT NULL AUTO_INCREMENT,
                             `order_number` varchar(255) DEFAULT NULL,
+                            created_date TIMESTAMP,
                             PRIMARY KEY (`order_id`)
 );
 

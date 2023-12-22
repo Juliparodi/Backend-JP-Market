@@ -1,11 +1,6 @@
 {
   "orderLineItemsDtoList": [
     {
-      "skuCode": "SKU001",
-      "price": 25.99,
-      "quantity": 2
-    },
-    {
       "skuCode": "iphone_13",
       "price": 19.5,
       "quantity": 3

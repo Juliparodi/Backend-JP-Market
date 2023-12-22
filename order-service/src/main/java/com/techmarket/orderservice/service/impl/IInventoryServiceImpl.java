@@ -60,7 +60,6 @@ public class IInventoryServiceImpl implements IInventoryService {
 
     private List<InventoryResponse> getInventoryResponse(List<String> skuCodes) {
 
-
         return webClientBuilder
                 .build().get()
                 .uri(INVENTORY_URL, uriBuilder -> uriBuilder.queryParam(SKU_CODE, skuCodes).build())

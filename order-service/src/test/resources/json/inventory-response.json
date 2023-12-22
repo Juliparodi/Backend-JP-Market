@@ -1,0 +1,14 @@
+[
+  {
+    "skuCode": "iphone_13",
+    "isInStock": true
+  },
+  {
+    "skuCode": "DEF456",
+    "isInStock": false
+  },
+  {
+    "skuCode": "GHI789",
+    "isInStock": true
+  }
+]

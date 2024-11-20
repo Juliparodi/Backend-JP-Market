@@ -3,8 +3,7 @@ package com.techmarket.orderservice.service.impl;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
 import com.techmarket.orderservice.event.OrderPlacedEvent;
-import com.techmarket.orderservice.exceptions.NoStockException;
-import com.techmarket.orderservice.service.IInventoryService;
+import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProccessingService;
 import com.techmarket.orderservice.service.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 public class OrderProccessingServiceImpl implements IOrderProccessingService {
 
     private final IOrderService orderService;
-    private final IInventoryService inventoryService;
+    private final InventoryService inventoryService;
     private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Override

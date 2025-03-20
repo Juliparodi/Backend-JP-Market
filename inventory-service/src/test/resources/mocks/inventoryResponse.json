@@ -1,0 +1,10 @@
+[
+  {
+    "skuCode": "123",
+    "isInStock": false
+  },
+  {
+    "skuCode": "1234",
+    "isInStock": true
+  }
+]

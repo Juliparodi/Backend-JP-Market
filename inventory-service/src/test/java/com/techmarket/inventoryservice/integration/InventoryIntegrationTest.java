@@ -38,7 +38,9 @@ public class InventoryIntegrationTest {
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15-alpine"))
             .withDatabaseName("defaultdb")
             .withUsername("avnadmin")
-            .withPassword("AVNS_fGboD7F3aqnxDKTN-oo");
+            .withPassword("AVNS_fGboD7F3aqnxDKTN-oo")
+            .withInitScript("sql/init_inventory.sql");
+
 
     @Autowired
     private MockMvc mockMvc;

@@ -116,6 +116,10 @@
                 <version>3.0.0-M5</version>
                 <!-- Additional configurations if needed -->
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+            </plugin>
         </plugins>
     </build>
 

@@ -1,16 +1,12 @@
 package com.techmarket.inventoryservice.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Value
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class InventoryResponse {
 
-    private String skuCode;
-    private Boolean isInStock;
+    String skuCode;
+    Boolean isInStock;
 }

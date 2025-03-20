@@ -7,6 +7,7 @@ import com.techmarket.inventoryservice.service.IInventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class InventoryServiceImpl implements IInventoryService {
     @Transactional(readOnly = true)
     public List<InventoryResponse> isInStock(List<String> skuCodes) {
         List<Inventory> inventories = inventoryRepository.findBySkuCodeIn(skuCodes);
-        if (inventories != null && !inventories.isEmpty()) {
+        if (!CollectionUtils.isEmpty(inventories)) {
             return inventories.stream()
                     .map(inventory ->
                             InventoryResponse.builder()

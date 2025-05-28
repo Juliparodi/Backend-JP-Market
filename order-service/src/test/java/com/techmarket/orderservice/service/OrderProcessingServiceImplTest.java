@@ -1,13 +1,8 @@
-package com.techmarket.orderservice.unit.service;
+package com.techmarket.orderservice.service;
 
 import com.techmarket.orderservice.domain.dto.OrderLineItemsDTO;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
-import com.techmarket.orderservice.domain.entities.Order;
-import com.techmarket.orderservice.domain.entities.OrderLineItems;
-import com.techmarket.orderservice.event.OrderPlacedEvent;
-import com.techmarket.orderservice.exceptions.NoInventoriesException;
-import com.techmarket.orderservice.exceptions.NoStockException;
-import com.techmarket.orderservice.repository.OrderRepository;
+import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.IOrderService;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
@@ -26,11 +21,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
+import static com.techmarket.orderservice.mocks.OrderMocks.getOrderMock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-public class OrderServiceTest {
+public class OrderProcessingServiceTest {
 
   private MockWebServer mockWebServer;
 
@@ -97,22 +90,27 @@ public class OrderServiceTest {
     Assertions.assertEquals("Order placed successfully", response);
   }
 
+  @Test
+  void whenInventoryTakesMoreThan4SecsInRespond_ThenThrowTimeout() {
+    when(webClientBuilder.baseUrl(anyString())).thenReturn(webClientBuilder);
+    when(webClientBuilder.build()).thenReturn(WebClient.builder().baseUrl(INVENTORY_URL).build());
+    when(orderService.createOrder(any())).thenReturn(getOrderMock());
+    when(orderService.extractSkuCodes(any())).thenReturn(getSkuCodes());
+    doAnswer(invocation -> {
+      Thread.sleep(5000);
+      return null;
+    }).when(inventoryService).processAndValidateStock(any());
+
+    OrderRequestDTO orderRequest = new OrderRequestDTO();
+    orderRequest.setOrderLineItemsDtoList(List.of(OrderLineItemsDTO.builder().skuCode("iphone_13").build()));
+
+    Assertions.assertThrows(RuntimeException.class, () ->
+        orderProccessingService.placeOrder(orderRequest));
+
+  }
+
     private List<String> getSkuCodes() {
       return List.of("skuCode123");
     }
 
-  private Order getOrderMock() {
-    return Order.builder()
-        .orderId(123L)
-        .orderNumber("1234O")
-        .createdDate(LocalDate.of(2024, 8, 11).atStartOfDay())
-        .orderLineItemsList(List.of(
-            OrderLineItems.builder()
-                .price(new BigDecimal(123))
-                .quantity(12)
-                .skuCode("skuCode1")
-                .build())
-        )
-        .build();
-  }
 }

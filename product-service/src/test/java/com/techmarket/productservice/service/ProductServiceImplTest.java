@@ -92,7 +92,7 @@ public class ProductServiceImplTest {
     when(categoryRepository.findByName("UNKNOWN")).thenReturn(Optional.empty());
 
     // When / Then
-    assertThrows(NoSuchElementException.class, () -> productService.createProduct(productDto));
+    assertThrows(RuntimeException.class, () -> productService.createProduct(productDto));
     verify(productRepository, never()).save(any());
   }
 

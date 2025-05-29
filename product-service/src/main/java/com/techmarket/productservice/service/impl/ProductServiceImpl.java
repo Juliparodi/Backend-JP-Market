@@ -34,7 +34,7 @@ public class ProductServiceImpl implements IProductService {
                 .price(productRequest.getPrice())
                 .stock(productRequest.getStock())
                 .price(productRequest.getPrice())
-                .category(categoryOptional.map(Category::getId).orElse(null))
+                .category(categoryOptional.map(Category::getId).orElseThrow(RuntimeException::new))
                 .img(productRequest.getImg())
                 .build();
 

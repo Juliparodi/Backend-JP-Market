@@ -2,7 +2,7 @@ package com.techmarket.orderservice.service;
 
 import java.util.List;
 
-public interface IInventoryService {
+public interface InventoryService {
 
-    void proccesAndValidateStock(List<String> skuCodes);
+    void processAndValidateStock(List<String> skuCodes);
 }

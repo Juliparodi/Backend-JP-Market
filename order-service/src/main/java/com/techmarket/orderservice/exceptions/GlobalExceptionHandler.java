@@ -17,7 +17,7 @@ import static com.techmarket.orderservice.constants.ExceptionConstants.NO_STOCK_
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({NoStockException.class, NoInventoriesException.class})
-    public ResponseEntity<String> handleSuperHeroNotFoundException(RuntimeException ex) {
+    public ResponseEntity<String> handleNoStockNoInventoryException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

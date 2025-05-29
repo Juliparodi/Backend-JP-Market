@@ -1,4 +1,4 @@
-package com.techmarket.orderservice.event;
+package com.techmarket.orderservice.domain.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

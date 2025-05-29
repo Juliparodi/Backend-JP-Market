@@ -1,0 +1,1 @@
+/usr/lib/postgresql/16/bin/postgres "-D" "/data/postgres" "-p" "5431" "-c" "listen_addresses=" "-p" "5432"

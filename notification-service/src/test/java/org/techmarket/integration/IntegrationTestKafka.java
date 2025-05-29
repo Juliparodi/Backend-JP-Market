@@ -1,4 +1,4 @@
-package org.techmarket;
+package org.techmarket.integration;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -44,7 +44,7 @@ public class IntegrationTestKafka {
     static void configureKafkaBootstrap(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
     }
-    
+
     @BeforeAll
     static void setUp() {
         kafkaContainer.start();

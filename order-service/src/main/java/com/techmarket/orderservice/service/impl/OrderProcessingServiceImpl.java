@@ -2,7 +2,7 @@ package com.techmarket.orderservice.service.impl;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
-import com.techmarket.orderservice.event.OrderPlacedEvent;
+import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProccessingService;
 import com.techmarket.orderservice.service.IOrderService;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
-public class OrderProccessingServiceImpl implements IOrderProccessingService {
+public class OrderProcessingServiceImpl implements IOrderProccessingService {
 
     private final IOrderService orderService;
     private final InventoryService inventoryService;
@@ -28,7 +28,7 @@ public class OrderProccessingServiceImpl implements IOrderProccessingService {
 
         long startTime = System.currentTimeMillis();
         try {
-            inventoryService.proccesAndValidateStock(skuCodes);
+            inventoryService.processAndValidateStock(skuCodes);
             if (System.currentTimeMillis() - startTime >= 4000) {
                 throw new TimeoutException();
             } else {

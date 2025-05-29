@@ -3,8 +3,6 @@ package com.techmarket.orderservice.service;
 import com.techmarket.orderservice.domain.dto.OrderLineItemsDTO;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
-import com.techmarket.orderservice.service.IOrderService;
-import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -32,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-public class OrderProcessingServiceTest {
+public class OrderProcessingServiceImplTest {
 
   private MockWebServer mockWebServer;
 

@@ -15,13 +15,7 @@ import org.techmarket.service.INotificationService;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements INotificationService {
 
-    private IEmailService emailService;
-
-    @Autowired
-    public NotificationServiceImpl(IEmailService emailService) {
-        this.emailService = emailService;
-    }
-
+    private final IEmailService emailService;
 
     @KafkaListener(topics = "orderTopic")
     public void handleNotification(OrderPlacedEvent orderPlacedEvent) {

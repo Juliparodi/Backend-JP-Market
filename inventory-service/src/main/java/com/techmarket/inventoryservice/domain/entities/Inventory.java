@@ -2,7 +2,7 @@ package com.techmarket.inventoryservice.domain.entities;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "t_inventory")

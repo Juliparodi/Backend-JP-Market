@@ -1,29 +1,19 @@
 package com.techmarket.inventoryservice.unit.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.techmarket.inventoryservice.controller.InventoryController;
 import com.techmarket.inventoryservice.domain.dto.InventoryResponse;
-import com.techmarket.inventoryservice.domain.entities.Inventory;
 import com.techmarket.inventoryservice.repository.InventoryRepository;
 import com.techmarket.inventoryservice.service.IInventoryService;
 import com.techmarket.inventoryservice.utils.JsonConverter;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +28,9 @@ public class InventoryControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
-  @MockBean
+  @MockitoBean
   private IInventoryService inventoryService;
-  @MockBean
+  @MockitoBean
   private InventoryRepository inventoryRepository;
 
 

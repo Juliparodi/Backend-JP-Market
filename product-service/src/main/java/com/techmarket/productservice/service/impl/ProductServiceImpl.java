@@ -6,6 +6,7 @@ import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.repository.CategoryRepository;
 import com.techmarket.productservice.repository.ProductRepository;
 import com.techmarket.productservice.service.IProductService;
+import com.techmarket.productservice.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bson.types.ObjectId;
@@ -21,6 +22,7 @@ public class ProductServiceImpl implements IProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductMapper productMapper;
 
 
     public void createProduct(ProductoDTO productRequest) {
@@ -32,7 +34,7 @@ public class ProductServiceImpl implements IProductService {
                 .price(productRequest.getPrice())
                 .stock(productRequest.getStock())
                 .price(productRequest.getPrice())
-                .category(categoryOptional.get().getId())
+                .category(categoryOptional.map(Category::getId).orElse(null))
                 .img(productRequest.getImg())
                 .build();
 
@@ -43,17 +45,7 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductoDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
-        return products.stream().map(this::mapToProductResponse).toList();
+        return productMapper.mapToProductResponse(products);
     }
 
-    private ProductoDTO mapToProductResponse(Product product) {
-        return ProductoDTO.builder()
-                .name(product.getName())
-                .nameWithDetail(product.getNameWithDetail())
-                .stock(product.getStock())
-                .price(product.getPrice())
-                .category(product.getCategory().toHexString())
-                .img(product.getImg())
-                .build();
-    }
 }

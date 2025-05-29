@@ -7,8 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 
 import static com.techmarket.productservice.exceptions.constants.ExceptionConstants.PROMOTION_ALREADY_EXIST;
 

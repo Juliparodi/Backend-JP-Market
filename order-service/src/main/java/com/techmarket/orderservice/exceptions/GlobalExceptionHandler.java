@@ -1,5 +1,7 @@
 package com.techmarket.orderservice.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -7,8 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 
 import static com.techmarket.orderservice.constants.ExceptionConstants.NO_INVENTORIES_MESSAGE;
 import static com.techmarket.orderservice.constants.ExceptionConstants.NO_STOCK_MESSAGE;

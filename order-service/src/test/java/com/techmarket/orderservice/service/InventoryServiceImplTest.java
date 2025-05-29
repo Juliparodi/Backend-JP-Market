@@ -5,13 +5,13 @@ import com.techmarket.orderservice.exceptions.NoInventoriesException;
 import com.techmarket.orderservice.exceptions.NoStockException;
 import com.techmarket.orderservice.repository.ClientRepository;
 import com.techmarket.orderservice.service.impl.InventoryServiceImpl;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;

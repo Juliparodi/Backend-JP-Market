@@ -1,20 +1,19 @@
 package com.techmarket.orderservice.integration;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.techmarket.orderservice.repository.OrderRepository;
+import com.techmarket.orderservice.service.impl.InventoryServiceImpl;
+import com.techmarket.orderservice.service.impl.OrderServiceImpl;
 import com.techmarket.orderservice.utils.JsonConverter;
+import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,10 +23,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-
-import java.io.IOException;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Testcontainers
@@ -49,6 +44,12 @@ public class OrderIntegrationTests {
     private MockMvc mockMvc;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private InventoryServiceImpl inventoryService;
+    @Autowired
+    private OrderServiceImpl orderService;
+    @Autowired
+    private Tracer tracer;
     @Value("${token}")
     private String TOKEN;
 

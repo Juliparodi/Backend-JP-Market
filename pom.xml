@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.6</version>
+        <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -33,6 +33,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.9.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
                 <version>1.16.3</version>
@@ -47,13 +54,21 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-sleuth</artifactId>
-            </dependency>
-            <dependency>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest</artifactId>
                 <version>1.14.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.5.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing</artifactId>
+                <version>1.4.3</version>
             </dependency>
 
         </dependencies>
@@ -61,6 +76,11 @@
 
     <build>
             <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.15.0</version>
+                </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -118,6 +138,27 @@
                                 <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
                             </configuration>
                         </execution>
+                        <!-- fail build if line coverage is lover then defined threshold -->
+                        <execution>
+                            <id>jacoco-check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <rule>
+                                        <element>PACKAGE</element>
+                                        <limits>
+                                            <limit>
+                                                <counter>LINE</counter>
+                                                <value>COVEREDRATIO</value>
+                                                <minimum>0.7</minimum>
+                                            </limit>
+                                        </limits>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
@@ -151,7 +192,9 @@
                             <param>com.techmarket.*.domain.*</param>
                             <param>com.techmarket.*.exceptions.*</param>
                             <param>com.techmarket.*.repository.*</param>
+                            <param>com.techmarket.*.mapper.*</param>
                         </excludedClasses>
+                        <verbose>true</verbose>
                     </configuration>
                     <dependencies>
                         <dependency>

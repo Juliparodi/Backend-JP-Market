@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.techmarket.orderservice.mocks.OrderMocks.getOrderMock;
@@ -29,7 +30,7 @@ public class OrderServiceImplTest {
   private OrderRepository orderRepository;
 
   @Test
-  void whenCreateOrderFromDto_thenReturnOrder() throws IOException {
+  void whenCreateOrderFromDto_thenReturnOrder() throws IOException, URISyntaxException {
     OrderRequestDTO orderRequest = loadJsonFromFile("new-order.json", OrderRequestDTO.class);
 
     Order response = orderService.createOrder(orderRequest);

@@ -19,6 +19,10 @@ Handles product creation and retrieval.
     - Spring Web, Spring Data JPA
     - PostgreSQL or MySQL
 
+- **Tests Coverage**:
+  - Jacoco:
+  - Mutation test: 80%
+
 ---
 
 ### 2. **order-service**
@@ -50,6 +54,9 @@ Checks product availability.
     - Spring Web, Spring Data JPA
     - MySQL or PostgreSQL
 
+- **Tests Coverage**:
+  - Jacoco:
+  - Mutation test: 100%
 ---
 
 ### 4. **notification-service**
@@ -62,7 +69,9 @@ Sends email notifications when an order is placed.
 - **Tech Stack**:
     - Spring Kafka, Spring Mail
     - MailDev or SMTP mock
-
+- **Tests Coverage**:
+  - Jacoco:
+  - Mutation test: 85%
 ---
 
 ### 5. **api-gateway**

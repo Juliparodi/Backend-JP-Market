@@ -6,14 +6,19 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "t_inventory")
-@Value
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Inventory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Column(name = "sku_code")
     String skuCode;
+
     Integer quantity;
 
 }

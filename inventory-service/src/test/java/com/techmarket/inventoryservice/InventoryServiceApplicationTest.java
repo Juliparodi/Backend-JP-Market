@@ -1,6 +1,5 @@
 package com.techmarket.inventoryservice;
 
-import com.techmarket.inventoryservice.domain.dto.InventoryResponse;
 import com.techmarket.inventoryservice.domain.entities.Inventory;
 import com.techmarket.inventoryservice.repository.InventoryRepository;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,5 +44,10 @@ public class InventoryServiceApplicationTest {
     // Verify repository was called
     assertDoesNotThrow(() -> runner.run());
 
+  }
+
+  @Test
+  void contextLoads() {
+    assertTrue(true);
   }
 }

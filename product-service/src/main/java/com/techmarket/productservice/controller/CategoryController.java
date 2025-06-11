@@ -1,10 +1,7 @@
 package com.techmarket.productservice.controller;
 
 import com.techmarket.productservice.model.dto.CategoryDTO;
-import com.techmarket.productservice.model.dto.ProductoDTO;
-import com.techmarket.productservice.model.dto.PromotionDTO;
 import com.techmarket.productservice.service.ICategoryService;
-import com.techmarket.productservice.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

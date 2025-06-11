@@ -1,7 +1,7 @@
 package com.techmarket.productservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Variation;
 import com.techmarket.productservice.service.IProductService;
 import org.junit.jupiter.api.DisplayName;
@@ -38,11 +38,11 @@ public class ProductControllerTest {
   @Test
   @DisplayName("POST /api/techMarket/product - should create product")
   void createProduct_shouldReturnCreated() throws Exception {
-    ProductoDTO productRequest = new ProductoDTO();
+    ProductDTO productRequest = new ProductDTO();
     productRequest.setName("Laptop");
     productRequest.setPrice(new BigDecimal("1299.99"));
 
-    doNothing().when(productService).createProduct(Mockito.any(ProductoDTO.class));
+    doNothing().when(productService).createProduct(Mockito.any(ProductDTO.class));
 
     mockMvc.perform(post("/api/techMarket/product")
             .contentType(MediaType.APPLICATION_JSON)
@@ -53,8 +53,8 @@ public class ProductControllerTest {
   @Test
   @DisplayName("GET /api/techMarket/product/all - should return list of products")
   void getAllProducts_shouldReturnProductList() throws Exception {
-    List<ProductoDTO> products = List.of(
-        new ProductoDTO(
+    List<ProductDTO> products = List.of(
+        new ProductDTO(
             "T-Shirt",
             "T-Shirt - Cotton - Red",
             "CLOTHING",

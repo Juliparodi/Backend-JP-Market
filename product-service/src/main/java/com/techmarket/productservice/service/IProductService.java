@@ -1,11 +1,11 @@
 package com.techmarket.productservice.service;
 
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 
 import java.util.List;
 
 public interface IProductService {
-    List<ProductoDTO> getAllProducts();
+    List<ProductDTO> getAllProducts();
 
-    void createProduct(ProductoDTO productRequest);
+    void createProduct(ProductDTO productRequest);
 }

@@ -1,6 +1,6 @@
 package com.techmarket.productservice.service.impl;
 
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Category;
 import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.repository.CategoryRepository;
@@ -9,7 +9,6 @@ import com.techmarket.productservice.service.IProductService;
 import com.techmarket.productservice.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class ProductServiceImpl implements IProductService {
     private final ProductMapper productMapper;
 
 
-    public void createProduct(ProductoDTO productRequest) {
+    public void createProduct(ProductDTO productRequest) {
         Optional<Category> categoryOptional = categoryRepository.findByName(productRequest.getCategory());
 
         Product product = Product.builder()
@@ -42,7 +41,7 @@ public class ProductServiceImpl implements IProductService {
         productRepository.save(product);
     }
 
-    public List<ProductoDTO> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
         return productMapper.mapToProductResponse(products);

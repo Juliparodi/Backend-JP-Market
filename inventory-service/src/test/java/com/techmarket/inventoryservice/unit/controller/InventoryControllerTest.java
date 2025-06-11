@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +35,7 @@ public class InventoryControllerTest {
 
   @Test
   @SneakyThrows
-  void testGetAllSuperHeroes() {
+  void whenExecutingGetInventoryWithSkuCodeParam_thenRespondWithInventoryResponse() {
     List<String> skuCodes = List.of("iphone_13");
     when(inventoryRepository.saveAll(anyList())).thenReturn(new ArrayList<>());
     when(inventoryService.isInStock(skuCodes)).thenReturn(List.of(

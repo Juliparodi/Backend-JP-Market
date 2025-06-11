@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 public class JsonConverter {
 
-    public static final String fileAbsolutePath = "/";
+    public static final String fileAbsolutePath = "mocks/";
 
     private JsonConverter(){}
 

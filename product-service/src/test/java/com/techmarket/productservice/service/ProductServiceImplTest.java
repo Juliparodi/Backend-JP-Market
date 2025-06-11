@@ -1,6 +1,6 @@
 package com.techmarket.productservice.service;
 
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Category;
 import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.model.entities.Promotion;
@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,12 +42,12 @@ public class ProductServiceImplTest {
 
   private ObjectId categoryId;
 
-  private ProductoDTO productDto;
+  private ProductDTO productDto;
 
   @BeforeEach
   void setUp() {
     categoryId = new ObjectId("507f191e810c19729de860ea");
-    productDto = ProductoDTO.builder()
+    productDto = ProductDTO.builder()
         .name("Shirt")
         .nameWithDetail("Cotton Shirt")
         .stock(20)
@@ -84,7 +83,7 @@ public class ProductServiceImplTest {
   @Test
   void createProduct_shouldThrowExceptionWhenCategoryNotFound() {
     // Given
-    ProductoDTO productDto = ProductoDTO.builder()
+    ProductDTO productDto = ProductDTO.builder()
         .name("Shirt")
         .category("UNKNOWN")
         .build();
@@ -112,11 +111,11 @@ public class ProductServiceImplTest {
     when(productMapper.mapToProductResponse(List.of(product))).thenReturn(List.of(productDto));
 
     // When
-    List<ProductoDTO> result = productService.getAllProducts();
+    List<ProductDTO> result = productService.getAllProducts();
 
     // Then
     assertEquals(1, result.size());
-    ProductoDTO dto = result.get(0);
+    ProductDTO dto = result.get(0);
     assertEquals("Shirt", dto.getName());
     assertEquals("Cotton Shirt", dto.getNameWithDetail());
     assertEquals("CLOTHING", dto.getCategory());

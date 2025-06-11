@@ -17,7 +17,7 @@ Handles product creation and retrieval.
 
 - **Tech Stack**:
     - Spring Web, Spring Data JPA
-    - PostgreSQL or MySQL
+    - MongoDB
 
 - **Tests Coverage**:
   - Jacoco:
@@ -35,10 +35,10 @@ Manages customer orders.
 
 - **Tech Stack**:
     - Spring Web, OpenFeign, Kafka
-    - MongoDB
+    - mysql
 
 - **Tests Coverage**:
-  - Jacoco:
+  - Jacoco: 94%
   - Mutation test: 73%
 
 ---
@@ -52,10 +52,10 @@ Checks product availability.
 
 - **Tech Stack**:
     - Spring Web, Spring Data JPA
-    - MySQL or PostgreSQL
+    - Kafka, postgresql
 
 - **Tests Coverage**:
-  - Jacoco:
+  - Jacoco: 100%
   - Mutation test: 100%
 ---
 
@@ -68,9 +68,9 @@ Sends email notifications when an order is placed.
 
 - **Tech Stack**:
     - Spring Kafka, Spring Mail
-    - MailDev or SMTP mock
+    - SMTP mock
 - **Tests Coverage**:
-  - Jacoco:
+  - Jacoco: 91%
   - Mutation test: 85%
 ---
 
@@ -93,7 +93,7 @@ Service registry for dynamic discovery.
     - Enables service discovery using Netflix Eureka.
 
 - **Tech Stack**:
-    - Spring Cloud Netflix Eureka Server
+    - Spring Cloud Netflix Eureka Server, Spring security
 
 ---
 

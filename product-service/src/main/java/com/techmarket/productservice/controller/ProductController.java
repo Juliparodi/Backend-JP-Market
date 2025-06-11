@@ -1,6 +1,6 @@
 package com.techmarket.productservice.controller;
 
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody @Valid ProductoDTO productRequest) {
+    public void createProduct(@RequestBody @Valid ProductDTO productRequest) {
         productService.createProduct(productRequest);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductoDTO> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 

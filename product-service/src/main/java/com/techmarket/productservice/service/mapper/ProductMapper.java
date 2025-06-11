@@ -1,6 +1,6 @@
 package com.techmarket.productservice.service.mapper;
 
-import com.techmarket.productservice.model.dto.ProductoDTO;
+import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Product;
 import org.bson.types.ObjectId;
 import org.mapstruct.Mapper;
@@ -12,10 +12,17 @@ import java.util.List;
 public interface ProductMapper {
 
   @Mapping(target = "category", source = "category")
-  List<ProductoDTO> mapToProductResponse(List<Product> product);
+  List<ProductDTO> mapToProductResponse(List<Product> product);
+
+  @Mapping(target = "category", source = "category")
+  Product requestToEntity(ProductDTO product);
 
   default String map(ObjectId objectId) {
     return objectId != null ? objectId.toHexString() : null;
+  }
+
+  default ObjectId map(String objectId) {
+    return objectId != null ? new ObjectId(objectId) : null;
   }
 
 }

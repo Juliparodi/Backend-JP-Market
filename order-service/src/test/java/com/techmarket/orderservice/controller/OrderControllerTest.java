@@ -1,7 +1,7 @@
 package com.techmarket.orderservice.controller;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
-import com.techmarket.orderservice.service.IOrderProccessingService;
+import com.techmarket.orderservice.service.IOrderProcessingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class OrderControllerTest {
 
   @Mock
-  private IOrderProccessingService orderProcessingService;
+  private IOrderProcessingService orderProcessingService;
 
   @InjectMocks
   private OrderController orderController;

@@ -4,7 +4,7 @@ import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
 import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.InventoryService;
-import com.techmarket.orderservice.service.IOrderProccessingService;
+import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,11 +15,11 @@ import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
-public class OrderProcessingServiceImpl implements IOrderProccessingService {
+public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private final IOrderService orderService;
     private final InventoryService inventoryService;
-    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     public String placeOrder(OrderRequestDTO orderRequest) {

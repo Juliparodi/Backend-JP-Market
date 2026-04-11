@@ -1,30 +1,19 @@
 package com.techmarket.orderservice.service.impl;
 
-import com.techmarket.orderservice.domain.dto.InventoryResponse;
 import com.techmarket.orderservice.domain.dto.OrderLineItemsDTO;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
 import com.techmarket.orderservice.domain.entities.OrderLineItems;
-import com.techmarket.orderservice.exceptions.NoInventoriesException;
-import com.techmarket.orderservice.exceptions.NoStockException;
 import com.techmarket.orderservice.repository.OrderRepository;
 import com.techmarket.orderservice.service.IOrderService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 import java.util.UUID;
 
-import static com.techmarket.orderservice.constants.Constants.SKU_CODE;
 
 @Service
 @RequiredArgsConstructor

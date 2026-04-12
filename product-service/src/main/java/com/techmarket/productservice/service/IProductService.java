@@ -8,4 +8,10 @@ public interface IProductService {
     List<ProductDTO> getAllProducts();
 
     void createProduct(ProductDTO productRequest);
+
+    ProductDTO getProductById(String id);
+
+    void updateProduct(String id, ProductDTO productRequest);
+
+    void deleteProduct(String id);
 }

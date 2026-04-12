@@ -41,50 +41,30 @@ services:
       - 1025:1025  # SMTP server
       - 8025:8025  # MailHog web interface
 
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: zipkin
-    ports:
-      - "9411:9411"
-
-  setup_permissions:
-    image: alpine
-    entrypoint: sh -c "chown -R 1000:0 /keycloak"
-    volumes:
-      - keycloak:/keycloak
-    command: "tail -f /dev/null"  # Keeps the container running
-
   keycloak:
-    container_name: keycloak
-    image: quay.io/keycloak/keycloak:18.0.2
-
+    image: 'quay.io/keycloak/keycloak'
+    command: start-dev
+    environment:
+      KC_DB: mysql
+      KC_DB_URL_HOST: keycloak-mysql
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     ports:
       - "8181:8080"
-    environment:
-      DB_VENDOR: MYSQL
-      DB_ADDR: mysql
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: password
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    volumes:
-      - keycloak:/opt/keycloak/data/h2
-    command: "start-dev --http-relative-path /auth"
     depends_on:
       - keycloak-mysql
-
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
 
   keycloak-mysql:
-    container_name: keycloak-mysql
-    image: mysql:5.7
-    volumes:
-      - ./mysql_keycloak_data:/var/lib/mysql
+    image: 'mirror.gcr.io/mysql:8'
     environment:
-      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
 
   postgres-inventory:
     container_name: postgres-inventory
@@ -134,20 +114,31 @@ services:
     volumes:
       - ./mongo-data:/data/db
 
-#TECH MARKET MICROSERVICES
-  discovery-service:
-    image: juliparodi/techmarket:discovery-service
-    container_name: discovery-service
-    pull_policy: always
-    hostname: discovery-service
+
+  ## Prometheus
+  prometheus:
+    image: 'mirror.gcr.io/prom/prometheus:latest'
+    container_name: prometheus
+    restart: always
     ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
-      - zipkin
+      - product-service
+      - inventory-service
+      - order-service
+      - notification-service
+
+  grafana-lgtm:
+    image: 'grafana/otel-lgtm:latest'
+    ports:
+      - '3000:3000'
+      - '4317:4317'
+      - '4318:4318'
+      - "9090:9090"
+
+#TECH MARKET MICROSERVICES
 
   api-gateway:
     image: juliparodi/techmarket:api-gateway
@@ -163,9 +154,9 @@ services:
       - EUREKA_USERNAME=${EUREKA_USERNAME}
       - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
-      - zipkin
-      - discovery-service
       - keycloak
+    networks:
+      - techmarket-network
 
   product-service:
     container_name: product-service
@@ -177,8 +168,9 @@ services:
       - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - mongo
-      - discovery-service
       - api-gateway
+    networks:
+      - techmarket-network
 
 
   order-service:
@@ -192,9 +184,9 @@ services:
     depends_on:
       - mysql-order
       - kafka
-      - zipkin
-      - discovery-service
       - api-gateway
+    networks:
+      - techmarket-network
 
   inventory-service:
     container_name: inventory-service
@@ -207,8 +199,9 @@ services:
       - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - postgres-inventory
-      - discovery-service
       - api-gateway
+    networks:
+      - techmarket-network
 
   notification-service:
     container_name: notification-service
@@ -219,42 +212,19 @@ services:
       - EUREKA_USERNAME=${EUREKA_USERNAME}
       - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
-      - zipkin
       - kafka
-      - discovery-service
       - api-gateway
       - mailhog
+    networks:
+      - techmarket-network
 
-
-    ## Prometheus
-  prometheus:
-    image: prom/prometheus:v2.37.1
-    container_name: prometheus
-    restart: always
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    depends_on:
-      - product-service
-      - inventory-service
-      - order-service
-      - notification-service
-
-  grafana:
-    image: grafana/grafana-oss:8.5.2
-    container_name: grafana
-    restart: always
-    ports:
-      - "3000:3000"
-    links:
-      - prometheus:prometheus
-    volumes:
-      - ./grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=password
 
 
 volumes:
   keycloak:
+  grafana-date:
+  cache:
+    driver: local
+
+networks:
+  techmarket-network:

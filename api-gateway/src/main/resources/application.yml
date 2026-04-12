@@ -1,0 +1,77 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: '1.0'
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: product-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/product/**
+              filters:
+                - RewritePath=/api/product/(?<segment>.*),/api/techMarket/product/${segment}
+                - RateLimit
+                - SecurityHeaders
+
+            - id: order-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/order/**
+              filters:
+                - RewritePath=/api/order/(?<segment>.*),/api/techMarket/order/${segment}
+                - RateLimit
+                - SecurityHeaders
+
+            - id: inventory-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/inventory/**
+              filters:
+                - RewritePath=/api/inventory/(?<segment>.*),/api/techMarket/inventory/${segment}
+                - RateLimit
+                - SecurityHeaders
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/techmarket-realm
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          actuator:
+            autoconfigure:
+              opentelemetry: DEBUG
+          docker:
+            compose: DEBUG
+        cloud:
+          gateway:
+            route:
+              RouteDefinitionLocator: INFO
+            nodeValue: TRACE
+    root: INFO
+server:
+  port: '8080'

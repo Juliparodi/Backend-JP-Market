@@ -4,19 +4,21 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
+import java.net.InetSocketAddress;
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-public class RateLimitGatewayFilterFactory extends AbstractGatewayFilterFactory<RateLimitGatewayFilterFactory.Config> {
+public class RateLimitGatewayFilterFactory
+        extends AbstractGatewayFilterFactory<RateLimitGatewayFilterFactory.Config> {
 
     private final ConcurrentHashMap<String, AtomicInteger> requestCounts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Instant> windowStarts = new ConcurrentHashMap<>();
+
     private final int maxRequests = 10; // per minute
-    private final long windowSize = 60 * 1000; // 1 minute in milliseconds
+    private final long windowSize = 60 * 1000; // 1 minute
 
     public RateLimitGatewayFilterFactory() {
         super(Config.class);
@@ -25,7 +27,12 @@ public class RateLimitGatewayFilterFactory extends AbstractGatewayFilterFactory<
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            String clientIP = exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
+
+            InetSocketAddress remoteAddress = exchange.getRequest().getRemoteAddress();
+            String clientIP = (remoteAddress != null && remoteAddress.getAddress() != null)
+                    ? remoteAddress.getAddress().getHostAddress()
+                    : "unknown";
+
             Instant now = Instant.now();
             Instant windowStart = windowStarts.get(clientIP);
 
@@ -33,16 +40,12 @@ public class RateLimitGatewayFilterFactory extends AbstractGatewayFilterFactory<
                 windowStarts.put(clientIP, now);
                 requestCounts.put(clientIP, new AtomicInteger(1));
             } else {
-                AtomicInteger count = requestCounts.get(clientIP);
-                if (count == null) {
-                    count = new AtomicInteger(1);
-                    requestCounts.put(clientIP, count);
-                } else {
-                    int currentCount = count.incrementAndGet();
-                    if (currentCount > maxRequests) {
-                        exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-                        return exchange.getResponse().setComplete();
-                    }
+                AtomicInteger count = requestCounts.computeIfAbsent(clientIP, k -> new AtomicInteger(0));
+                int currentCount = count.incrementAndGet();
+
+                if (currentCount > maxRequests) {
+                    exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+                    return exchange.getResponse().setComplete();
                 }
             }
 
@@ -51,6 +54,6 @@ public class RateLimitGatewayFilterFactory extends AbstractGatewayFilterFactory<
     }
 
     public static class Config {
-        // Configuration properties if needed
+        // optional config later
     }
 }

@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      routes[2]:
+        uri: http://inventory-service:8080
+        id: inventory-service
+      routes[0]:
+        id: product-service
+        uri: http://product-service:8080
+      routes[1]:
+        uri: http://order-service:8080
+        id: order-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/spring-boot-microservices-realm
+server:
+  port: '8080'

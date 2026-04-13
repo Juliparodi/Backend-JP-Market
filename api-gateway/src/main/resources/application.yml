@@ -12,6 +12,10 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
+  logging:
+    export:
+      otlp:
+        endpoint: http://localhost:4318/v1/logs
   endpoint:
     health:
       show-details: always
@@ -58,6 +62,8 @@ spring:
         jwt:
           issuer-uri: http://localhost:8181/realms/techmarket-realm
 logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
   level:
     org:
       springframework:
@@ -73,5 +79,8 @@ logging:
               RouteDefinitionLocator: INFO
             nodeValue: TRACE
     root: INFO
+    io.micrometer: DEBUG
+    io.opentelemetry: DEBUG
+    org.springframework.boot.actuate: DEBUG
 server:
   port: '8080'

@@ -13,22 +13,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.List;
 
 import static com.techmarket.orderservice.mocks.OrderMocks.getOrderMock;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 public class OrderProcessingServiceImplTest {
 
@@ -65,8 +63,6 @@ public class OrderProcessingServiceImplTest {
 
   @Test
   void whenOrderHasProductsWithStock_thenSaveOrder() {
-    when(webClientBuilder.baseUrl(anyString())).thenReturn(webClientBuilder);
-    when(webClientBuilder.build()).thenReturn(WebClient.builder().baseUrl(INVENTORY_URL).build());
     when(orderService.createOrder(any())).thenReturn(getOrderMock());
     when(orderService.extractSkuCodes(any())).thenReturn(getSkuCodes());
     doNothing().when(inventoryService).processAndValidateStock(anyList());
@@ -90,8 +86,6 @@ public class OrderProcessingServiceImplTest {
 
   @Test
   void whenInventoryTakesMoreThan4SecsInRespond_ThenThrowTimeout() {
-    when(webClientBuilder.baseUrl(anyString())).thenReturn(webClientBuilder);
-    when(webClientBuilder.build()).thenReturn(WebClient.builder().baseUrl(INVENTORY_URL).build());
     when(orderService.createOrder(any())).thenReturn(getOrderMock());
     when(orderService.extractSkuCodes(any())).thenReturn(getSkuCodes());
     doAnswer(invocation -> {

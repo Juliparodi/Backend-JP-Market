@@ -86,18 +86,6 @@ Routes external HTTP requests to internal microservices.
 
 ---
 
-### 6. **discovery-server**
-Service registry for dynamic discovery.
-
-- **Responsibilities**:
-    - Enables service discovery using Netflix Eureka.
-
-- **Tech Stack**:
-    - Spring Cloud Netflix Eureka Server, Spring security
-
----
-
-
 ## 🔐 Security
 - Implemented OAuth2-based authentication using **Keycloak**.
 - Secured access to endpoints via JWT tokens.
@@ -106,23 +94,23 @@ Service registry for dynamic discovery.
 
 ## 🧰 Tools & Technologies
 
-| Category | Tools / Libraries |
-|---------|-------------------|
-| **Languages** | Java 17 |
-| **Frameworks** | Spring Boot, Spring Cloud |
-| **Communication** | OpenFeign, Kafka |
-| **Service Registry** | Eureka |
-| **API Gateway** | Spring Cloud Gateway |
-| **Authentication** | Keycloak (OAuth2 + JWT) |
-| **Data** | PostgreSQL / MySQL, MongoDB |
-| **Messaging** | Apache Kafka |
-| **Configuration** | Spring Cloud Config |
-| **Monitoring** | Zipkin, Sleuth, Prometheus, Grafana |
-| **Logging** | ELK Stack (optional) |
-| **Testing** | JUnit 5, Testcontainers |
-| **Build Tool** | Maven |
-| **Containers** | Docker, Docker Compose |
-| **Deployment** | Kubernetes (optional) |
+| Category             | Tools / Libraries                       |
+|----------------------|-----------------------------------------|
+| **Languages**        | Java 25                                 |
+| **Frameworks**       | Spring Boot 4, Spring Cloud             |
+| **Communication**    | OpenFeign, Kafka                        |
+| **Service Registry** | Docker network                          |
+| **API Gateway**      | Spring Cloud Gateway                    |
+| **Authentication**   | Keycloak (OAuth2 + JWT)                 |
+| **Data**             | PostgreSQL / MySQL, MongoDB             |
+| **Messaging**        | Apache Kafka                            |
+| **Monitoring**       | OpenTelemetry, Prometheus, Grafana-lgtm |
+| **Logging**          | Log4j2                                  |
+| **Tracing**          | Tempo                                   |
+| **Testing**          | JUnit 5, Testcontainers                 |
+| **Build Tool**       | Maven                                   |
+| **Containers**       | Docker, Docker Compose                  |
+| **Deployment**       | Kubernetes                              |
 
 ---
 

@@ -1,6 +1,6 @@
 package com.techmarket.orderservice.utils;
 
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -27,7 +27,7 @@ public class JsonConverter {
         byte[] fileBytes = Files.readAllBytes(Paths.get(resourceUrl.toURI()));
 
         // Convert JSON to DTO
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = new JsonMapper();
         return objectMapper.readValue(new String(fileBytes, StandardCharsets.UTF_8), dtoClass);
     }
 

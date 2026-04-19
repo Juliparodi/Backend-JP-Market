@@ -1,0 +1,4 @@
+spring:
+  kafka:
+    template:
+      default-topic: orderTopic

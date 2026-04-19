@@ -1,0 +1,13 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+pathJson: src/test/resources/json/
+spring:
+  mongodb:
+    uri: mongodb+srv://julianparodi19:${MONGO_PASSWORD}@jpmarket.djj41xn.mongodb.net/jpmarket?retryWrites=true&w=majority&sslVerifyCertificate=false
+  application:
+    name: product-service
+server:
+  port: '0'

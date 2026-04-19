@@ -1,6 +1,5 @@
 package com.techmarket.productservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Variation;
 import com.techmarket.productservice.service.IProductService;
@@ -8,10 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,7 +33,7 @@ public class ProductControllerTest {
   private IProductService productService;
 
   @Autowired
-  private ObjectMapper objectMapper;
+  private JsonMapper jsonMapper;
 
   @Test
   @DisplayName("POST /api/techMarket/product - should create product")
@@ -46,7 +46,7 @@ public class ProductControllerTest {
 
     mockMvc.perform(post("/api/techMarket/product")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(productRequest)))
+            .content(jsonMapper.writeValueAsString(productRequest)))
         .andExpect(status().isCreated());
   }
 

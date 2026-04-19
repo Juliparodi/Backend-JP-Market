@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: avnadmin
+    url: jdbc:postgresql://inventory-service-juliparodi26.a.aivencloud.com:21097/defaultdb?user=avnadmin&password=${POSTGRE_PASSWORD}
+    password: ${POSTGRE_PASSWORD}
+  flyway:
+    enabled: 'true'
+    locations: classpath:db
+  application:
+    name: inventory-service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+server:
+  port: '0'

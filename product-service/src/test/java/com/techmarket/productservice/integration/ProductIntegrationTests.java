@@ -3,12 +3,11 @@ package com.techmarket.productservice.integration;
 import com.techmarket.productservice.repository.ProductRepository;
 import com.techmarket.productservice.utils.JsonConverter;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -50,7 +49,7 @@ public class ProductIntegrationTests {
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", () -> mongoDBContainer.getReplicaSetUrl());
+        registry.add("spring.mongodb.uri", () -> mongoDBContainer.getReplicaSetUrl());
     }
 
     @AfterEach

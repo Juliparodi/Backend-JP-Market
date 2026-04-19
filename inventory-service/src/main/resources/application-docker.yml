@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: juliparodi
+    url: jdbc:postgresql://postgres:5431/inventory-service
+    password: ${POSTGRE_PASSWORD}
+  flyway:
+    enabled: 'true'
+    locations: classpath:db
+  kafka:
+    bootstrap-servers: broker:29092
+server:
+  port: '8080'

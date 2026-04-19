@@ -1,0 +1,37 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+spring:
+  kafka:
+    template:
+      default-topic: orderTopic
+    consumer:
+      group-id: notificationId
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:org.techmarket.event.OrderPlacedEvent
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    bootstrap-servers: localhost:29092
+  mail:
+    host: localhost
+    username: techmarketJP@gmail.com
+    port: '1025'
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: 'true'
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    password: Hola1234!
+  application:
+    name: notification-service
+server:
+  port: '0'

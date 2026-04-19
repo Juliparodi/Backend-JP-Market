@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: juliparodi
+    url: jdbc:mysql://mysql:3306/order-service
+    password: ${MYSQL_PASSWORD}
+  flyway:
+    enabled: 'true'
+    locations: classpath:db
+  kafka:
+    bootstrap-servers: broker:29092
+server:
+  port: '8080'

@@ -1,16 +1,17 @@
 package com.techmarket.productservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techmarket.productservice.model.dto.PromotionDTO;
 import com.techmarket.productservice.service.IPromotionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class PromotionControllerTest {
   private IPromotionService promotionService;
 
   @Autowired
-  private ObjectMapper objectMapper;
+  private JsonMapper jsonMapper;
 
   @Test
   @DisplayName("POST /api/techMarket/promotion - should create promotion")
@@ -42,7 +43,7 @@ public class PromotionControllerTest {
 
     mockMvc.perform(post("/api/techMarket/promotion")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(promo)))
+            .content(jsonMapper.writeValueAsString(promo)))
         .andExpect(status().isCreated());
   }
 

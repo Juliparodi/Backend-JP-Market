@@ -1,0 +1,64 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  health:
+    circuitbreakers:
+      enabled: 'true'
+  endpoint:
+    health:
+      show-details: always
+spring:
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:com.techmarket.orderservice.event.OrderPlacedEvent
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      default-topic: orderTopic
+    bootstrap-servers: localhost:29092
+  flyway:
+    enabled: 'true'
+    locations: classpath:db
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${MYSQL_PASSWORD}
+    username: avnadmin
+    url: jdbc:mysql://order-service-juliparodi26.a.aivencloud.com:21097/defaultdb
+  application:
+    name: order-service
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory:
+        failureRateThreshold: '50'
+        permittedNumberOfCallsInHalfOpenState: '3'
+        automaticTransitionFromOpenToHalfOpenEnabled: 'true'
+        event-consumer-buffer-size: '10'
+        registerHealthIndicator: 'true'
+        waitDurationInOpenState: 5s
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: '5'
+  timelimiter:
+    instances:
+      inventory:
+        base-config: default
+        timeout-duration: 10s
+        cancel-running-future: 'true'
+    configs:
+      default:
+        timeout-duration: 10s
+  retry:
+    instances:
+      inventory:
+        max-attempts: '3'
+        wait-duration: 12s
+server:
+  port: '8081'
+inventory:
+  url: http://inventory-service:8082/api/techMarket/inventory

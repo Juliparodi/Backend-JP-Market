@@ -1,0 +1,5 @@
+spring:
+  mongodb:
+    uri: mongodb://julianparodi19:${MONGO_PASSWORD}@mongo:27017/product-service
+server:
+  port: '8080'

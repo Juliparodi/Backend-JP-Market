@@ -35,20 +35,20 @@ public class PromotionControllerTest {
   private JsonMapper jsonMapper;
 
   @Test
-  @DisplayName("POST /api/techMarket/promotion - should create promotion")
+  @DisplayName("POST /api/promotion - should create promotion")
   void createPromotion_shouldReturnCreated() throws Exception {
     PromotionDTO promo = new PromotionDTO();
 
     doNothing().when(promotionService).createPromotion(Mockito.any(PromotionDTO.class));
 
-    mockMvc.perform(post("/api/techMarket/promotion")
+    mockMvc.perform(post("/api/promotion")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(promo)))
         .andExpect(status().isCreated());
   }
 
   @Test
-  @DisplayName("GET /api/techMarket/promotion/all - should return all promotions")
+  @DisplayName("GET /api/promotion/all - should return all promotions")
   void getAllPromotions_shouldReturnList() throws Exception {
     List<PromotionDTO> promotions = List.of(
         new PromotionDTO()
@@ -56,7 +56,7 @@ public class PromotionControllerTest {
 
     when(promotionService.getAllPromotions()).thenReturn(promotions);
 
-    mockMvc.perform(get("/api/techMarket/promotion/all"))
+    mockMvc.perform(get("/api/promotion/all"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(promotions.size()));
   }

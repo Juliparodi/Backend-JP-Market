@@ -5,45 +5,30 @@ import com.techmarket.orderservice.exceptions.NoInventoriesException;
 import com.techmarket.orderservice.exceptions.NoStockException;
 import com.techmarket.orderservice.repository.ClientRepository;
 import com.techmarket.orderservice.service.impl.InventoryServiceImpl;
-import io.micrometer.tracing.Span;
-import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class InventoryServiceImplTest {
 
 
   @Mock
   private ClientRepository clientRepository;
 
-  @Mock
-  private Tracer tracer;
-
-  @Mock
-  private Span span;
-
   @InjectMocks
   private InventoryServiceImpl inventoryService;
 
-  @BeforeEach
-  void setUp() {
-    MockitoAnnotations.openMocks(this);
-
-    // Mock tracer behavior
-    when(tracer.nextSpan()).thenReturn(span);
-    when(tracer.nextSpan().name(anyString())).thenReturn(span);
-    when(tracer.nextSpan().name(anyString()).start()).thenReturn(span);
-  }
 
   @Test
   void testProcessAndValidateStock_StockAvailable() {
@@ -60,9 +45,6 @@ public class InventoryServiceImplTest {
     // Verify repository was called
     verify(clientRepository, times(1)).getInventoryResponse(anyList());
 
-    // Verify span is started and ended
-    verify(span, times(1)).start();
-    verify(span, times(1)).end();
   }
 
   @Test
@@ -79,8 +61,6 @@ public class InventoryServiceImplTest {
         inventoryService.processAndValidateStock(List.of("sku1", "sku2"))
     );
 
-    // Verify span is ended even after an exception
-    verify(span, times(1)).end();
   }
 
   @Test
@@ -94,8 +74,6 @@ public class InventoryServiceImplTest {
         inventoryService.processAndValidateStock(List.of("sku1", "sku2"))
     );
 
-    // Verify span is ended
-    verify(span, times(1)).end();
   }
 
   @Test
@@ -108,8 +86,6 @@ public class InventoryServiceImplTest {
         inventoryService.processAndValidateStock(List.of("sku1", "sku2"))
     );
 
-    // Verify span is ended
-    verify(span, times(1)).end();
   }
 
   @Test
@@ -123,8 +99,6 @@ public class InventoryServiceImplTest {
         inventoryService.processAndValidateStock(List.of("sku1", "sku2"))
     );
 
-    // Verify span is ended
-    verify(span, times(1)).end();
   }
 
 

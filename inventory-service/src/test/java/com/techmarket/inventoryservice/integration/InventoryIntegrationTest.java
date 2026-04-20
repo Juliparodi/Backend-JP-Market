@@ -48,7 +48,7 @@ public class InventoryIntegrationTest {
 
     @Test
     void shouldReturnTrue() throws Exception {
-        mockMvc.perform(get("/api/techMarket/inventory")
+        mockMvc.perform(get("/api/inventory")
                         .queryParam("skuCode", "iphone_13")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN))
                 .andExpect(MockMvcResultMatchers.status().isOk())

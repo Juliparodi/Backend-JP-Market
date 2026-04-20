@@ -49,7 +49,7 @@ public class InventoryControllerTest {
             .build()
     ));
 
-    mockMvc.perform(get("/api/techMarket/inventory?skuCode=iphone_13"))
+    mockMvc.perform(get("/api/inventory?skuCode=iphone_13"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json(JsonConverter.loadJsonFromFile("inventoryResponse.json")));

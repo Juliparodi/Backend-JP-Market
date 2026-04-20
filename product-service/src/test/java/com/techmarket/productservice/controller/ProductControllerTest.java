@@ -36,7 +36,7 @@ public class ProductControllerTest {
   private JsonMapper jsonMapper;
 
   @Test
-  @DisplayName("POST /api/techMarket/product - should create product")
+  @DisplayName("POST /api/product - should create product")
   void createProduct_shouldReturnCreated() throws Exception {
     ProductDTO productRequest = new ProductDTO();
     productRequest.setName("Laptop");
@@ -44,14 +44,14 @@ public class ProductControllerTest {
 
     doNothing().when(productService).createProduct(Mockito.any(ProductDTO.class));
 
-    mockMvc.perform(post("/api/techMarket/product")
+    mockMvc.perform(post("/api/product")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(productRequest)))
         .andExpect(status().isCreated());
   }
 
   @Test
-  @DisplayName("GET /api/techMarket/product/all - should return list of products")
+  @DisplayName("GET /api/product/all - should return list of products")
   void getAllProducts_shouldReturnProductList() throws Exception {
     List<ProductDTO> products = List.of(
         new ProductDTO(
@@ -67,7 +67,7 @@ public class ProductControllerTest {
 
     when(productService.getAllProducts()).thenReturn(products);
 
-    mockMvc.perform(get("/api/techMarket/product/all"))
+    mockMvc.perform(get("/api/product/all"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(products.size()))
         .andExpect(jsonPath("$[0].name").value("T-Shirt"));

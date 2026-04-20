@@ -23,4 +23,4 @@ eureka:
   client:
     enabled: 'false'
 inventory:
-  url: http://localhost:8089/api/techMarket/inventory
+  url: http://localhost:8089/api/inventory

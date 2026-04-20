@@ -59,7 +59,7 @@ public class ProductIntegrationTests {
 
     @Test
     void shouldCreateProduct() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/techMarket/product")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonConverter.loadJsonFromFile("new-product.json"))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN))

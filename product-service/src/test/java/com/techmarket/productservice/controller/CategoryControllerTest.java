@@ -42,21 +42,21 @@ public class CategoryControllerTest {
   private JsonMapper jsonMapper;
 
   @Test
-  @DisplayName("POST /api/techMarket/category - should create category")
+  @DisplayName("POST /api/category - should create category")
   void createProduct_shouldReturnCreated() throws Exception {
     CategoryDTO categoryDTO = new CategoryDTO();
     categoryDTO.setName("Electronics");
 
     doNothing().when(categoryService).createCategory(Mockito.any(CategoryDTO.class));
 
-    mockMvc.perform(post("/api/techMarket/category")
+    mockMvc.perform(post("/api/category")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonMapper.writeValueAsString(categoryDTO)))
         .andExpect(status().isCreated());
   }
 
   @Test
-  @DisplayName("GET /api/techMarket/category/all - should return all categories")
+  @DisplayName("GET /api/category/all - should return all categories")
   void getAllProducts_shouldReturnCategoryList() throws Exception {
     List<CategoryDTO> categories = List.of(
         new CategoryDTO("Electronics"),
@@ -65,7 +65,7 @@ public class CategoryControllerTest {
 
     when(categoryService.getAllCategories()).thenReturn(categories);
 
-    mockMvc.perform(get("/api/techMarket/category/all"))
+    mockMvc.perform(get("/api/category/all"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(categories.size()))
         .andExpect(jsonPath("$[0].name").value("Electronics"))

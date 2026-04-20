@@ -64,7 +64,7 @@ public class OrderIntegrationTests {
     void whenSavingOrderWithProductsWithStock_thenReturnCreated() throws Exception {
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/techMarket/order")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN)
                         .content(JsonConverter.loadJsonFromFile("new-order.json")))

@@ -6,9 +6,10 @@ infraestructure/.env
 **/.env
 
 ### Databases ###
-/mongo-data
-/mysql-order
-/mysql_keycloak_data
+infraestructure/mongo-data
+infraestructure/mysql-order
+infraestructure/mysql_keycloak_data
+mongo-data
 
 ### IntelliJ IDEA ###
 .idea/

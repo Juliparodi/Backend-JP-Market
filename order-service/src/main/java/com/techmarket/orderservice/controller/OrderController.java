@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/api/techMarket/order")
+@RequestMapping("/api/order")
 @RequiredArgsConstructor
 public class OrderController {
 

@@ -4,12 +4,39 @@ management:
       exposure:
         include: '*'
   health:
+    health:
+      show-details: always
     circuitbreakers:
       enabled: 'true'
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  logging:
+    export:
+      otlp:
+        endpoint: http://localhost:4318/v1/logs
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: '1.0'
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/order-service
+    username: juliparodi
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: order-service
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
   kafka:
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -23,15 +50,8 @@ spring:
       default-topic: orderTopic
     bootstrap-servers: localhost:29092
   flyway:
-    enabled: 'true'
+    enabled: true
     locations: classpath:db
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    password: ${MYSQL_PASSWORD}
-    username: avnadmin
-    url: jdbc:mysql://order-service-juliparodi26.a.aivencloud.com:21097/defaultdb
-  application:
-    name: order-service
 resilience4j:
   circuitbreaker:
     instances:

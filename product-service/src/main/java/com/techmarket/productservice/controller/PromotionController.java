@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/techMarket/promotion")
+@RequestMapping("/api/promotion")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class PromotionController {

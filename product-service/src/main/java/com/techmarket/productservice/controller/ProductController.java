@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/techMarket/product")
+@RequestMapping("/api/product")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 @Tag(name = "Product Controller", description = "Controller for managing products")

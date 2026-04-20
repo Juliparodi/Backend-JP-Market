@@ -85,7 +85,7 @@ services:
 
   mysql-order:
     container_name: mysql-inventory
-    image: mysql
+    image: mysql:8.0
     environment:
       MYSQL_DATABASE: order-service
       MYSQL_USER: juliparodi

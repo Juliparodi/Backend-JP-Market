@@ -1,19 +1,23 @@
-DROP TABLE IF EXISTS t_orders;
 DROP TABLE IF EXISTS order_line_items;
+DROP TABLE IF EXISTS t_orders;
 
-CREATE TABLE `t_orders` (
-                            `order_id` bigint NOT NULL AUTO_INCREMENT,
-                            `order_number` varchar(255) DEFAULT NULL,
-                            PRIMARY KEY (`order_id`)
-);
+CREATE TABLE t_orders (
+                          order_id BIGINT NOT NULL AUTO_INCREMENT,
+                          order_number VARCHAR(255) DEFAULT NULL,
+                          created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          PRIMARY KEY (order_id)
+) ENGINE=InnoDB;
 
-CREATE TABLE `order_line_items` (
-                                    `order_line_items_id` bigint NOT NULL AUTO_INCREMENT,
-                                    `price` decimal(19,2) DEFAULT NULL,
-                                    `quantity` int DEFAULT NULL,
-                                    `sku_code` varchar(255) DEFAULT NULL,
-                                    `order_id` bigint DEFAULT NULL,
-                                    PRIMARY KEY (`order_line_items_id`),
-                                    KEY `FK464467xtmx3fflaebpdd6tio` (`order_id`),
-                                    CONSTRAINT `FK464467xtmx3fflaebpdd6tio` FOREIGN KEY (`order_id`) REFERENCES `t_orders` (`order_id`)
-);
+CREATE TABLE order_line_items (
+                                  order_line_items_id BIGINT NOT NULL AUTO_INCREMENT,
+                                  price DECIMAL(19,2) DEFAULT NULL,
+                                  quantity INT DEFAULT NULL,
+                                  sku_code VARCHAR(255) DEFAULT NULL,
+                                  order_id BIGINT DEFAULT NULL,
+                                  PRIMARY KEY (order_line_items_id),
+                                  INDEX idx_order_id (order_id),
+                                  CONSTRAINT fk_order_items_order
+                                      FOREIGN KEY (order_id)
+                                          REFERENCES t_orders (order_id)
+                                          ON DELETE CASCADE
+) ENGINE=InnoDB;

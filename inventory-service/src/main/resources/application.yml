@@ -13,6 +13,30 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: '*'
+  health:
+    health:
+      show-details: always
+    circuitbreakers:
+      enabled: 'true'
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  logging:
+    export:
+      otlp:
+        endpoint: http://localhost:4318/v1/logs
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: '1.0'
 server:
   port: '0'

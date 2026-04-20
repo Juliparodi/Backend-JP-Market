@@ -15,6 +15,7 @@ CREATE TABLE `order_line_items` (
                                     `sku_code` varchar(255) DEFAULT NULL,
                                     `order_id` bigint DEFAULT NULL,
                                     PRIMARY KEY (`order_line_items_id`),
-                                    KEY `FK464467xtmx3fflaebpdd6tio` (`order_id`),
-                                    CONSTRAINT `FK464467xtmx3fflaebpdd6tio` FOREIGN KEY (`order_id`) REFERENCES `t_orders` (`order_id`)
+                                    CONSTRAINT `FK464467xtmx3fflaebpdd6tio`
+                                    FOREIGN KEY (`order_id`)
+                                    REFERENCES `t_orders` (`order_id`)
 );

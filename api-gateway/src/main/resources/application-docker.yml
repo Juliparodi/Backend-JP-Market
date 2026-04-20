@@ -1,15 +1,25 @@
 spring:
   cloud:
     gateway:
-      routes[2]:
-        uri: http://inventory-service:8080
-        id: inventory-service
-      routes[0]:
-        id: product-service
-        uri: http://product-service:8080
-      routes[1]:
-        uri: http://order-service:8080
-        id: order-service
+      server:
+        webflux:
+          routes:
+            - id: product-service
+              uri: http://product-service:8080
+              predicates:
+                - Path=/api/product/**
+
+            - id: order-service
+              uri: http://order-service:8080
+              predicates:
+                - Path=/api/order/**
+
+            - id: inventory-service
+              uri: http://inventory-service:8080
+              predicates:
+                - Path=/api/inventory/**,/api/category/**,/api/promotion/**
+  application:
+    name: api-gateway
   security:
     oauth2:
       resourceserver:

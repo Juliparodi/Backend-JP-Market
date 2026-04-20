@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/techMarket/category")
+@RequestMapping("/api/category")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class CategoryController {

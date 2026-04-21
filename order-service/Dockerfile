@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN useradd -m appuser
 
-COPY --chown=appuser:appuser target/api-gateway-*.jar app.jar
+COPY --chown=appuser:appuser target/order-service-*.jar app.jar
 
 USER appuser
 

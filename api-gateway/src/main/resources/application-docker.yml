@@ -27,3 +27,8 @@ spring:
           issuer-uri: http://keycloak:8080/realms/spring-boot-microservices-realm
 server:
   port: '8080'
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false

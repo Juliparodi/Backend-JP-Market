@@ -50,7 +50,41 @@ jobs:
         push: true
         tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}
 
+    - name: Update ECS task definition
+      if: matrix.service == 'api-gateway'
+      run: |
+        SERVICE=${{ matrix.service }}
+        IMAGE="juliparodi/techmarket:${SERVICE}-${{ github.sha }}"
+
+        echo "Updating image to $IMAGE"
+
+        # Download current task definition
+        aws ecs describe-task-definition \
+          --task-definition jp-market-task-definition-v2 \
+          --query 'taskDefinition' > task-def.json
+
+        # Clean AWS read-only fields
+        cat task-def.json | jq 'del(
+          .taskDefinitionArn,
+          .revision,
+          .status,
+          .requiresAttributes,
+          .compatibilities,
+          .registeredAt,
+          .registeredBy
+        )' > cleaned-task-def.json
+
+        # Replace image
+        jq --arg IMAGE "$IMAGE" \
+          '.containerDefinitions[0].image = $IMAGE' \
+          cleaned-task-def.json > updated-task-def.json
+
+        # Register new task definition revision
+        aws ecs register-task-definition \
+          --cli-input-json file://updated-task-def.json
+
     - name: Force ECS deployment
+      if: matrix.service == 'api-gateway'
       run: |
         aws ecs update-service \
           --cluster jp-market-cluster \

@@ -41,8 +41,6 @@ public class RoleBasedGatewayFilterFactory extends AbstractGatewayFilterFactory<
     }
 
     private boolean hasRole(Jwt jwt, String role) {
-        // Assuming roles are in "realm_access.roles" or "resource_access.{client}.roles"
-        // Adjust based on your Keycloak setup
         var realmAccess = jwt.getClaimAsMap("realm_access");
         if (realmAccess != null) {
             var roles = (java.util.List<String>) realmAccess.get("roles");

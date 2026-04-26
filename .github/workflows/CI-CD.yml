@@ -61,7 +61,7 @@ jobs:
         # Download current task definition
         aws ecs describe-task-definition \
           --task-definition jp-market-task-definition-v2 \
-          --query 'taskDefinition' > task-def.json
+          --query 'taskDefinition' > task-def.json \
           --region ${{ secrets.AWS_DEFAULT_REGION }}
 
         # Clean AWS read-only fields
@@ -82,7 +82,7 @@ jobs:
 
         # Register new task definition revision
         aws ecs register-task-definition \
-          --cli-input-json file://updated-task-def.json
+          --cli-input-json file://updated-task-def.json \
           --region ${{ secrets.AWS_DEFAULT_REGION }}
 
     - name: Force ECS deployment
@@ -91,7 +91,7 @@ jobs:
         aws ecs update-service \
           --cluster jp-market-cluster \
           --service jp-market-task-definition-v2-service-crorz47x \
-          --force-new-deployment
+          --force-new-deployment \
           --region ${{ secrets.AWS_DEFAULT_REGION }}
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

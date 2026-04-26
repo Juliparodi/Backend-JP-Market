@@ -48,4 +48,15 @@ jobs:
       with:
         context: ./${{ matrix.service }}
         push: true
-        tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}, juliparodi/techmarket:${{ matrix.service }}-latest
+        tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}
+
+    - name: Force ECS deployment
+      run: |
+        aws ecs update-service \
+          --cluster jp-market-cluster \
+          --service jp-market-task-definition-v2-service-crorz47x \
+          --force-new-deployment
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: eu-north-1

@@ -57,6 +57,8 @@ services:
       - keycloak-mysql
     volumes:
       - ./keycloak/realms:/opt/keycloak/data/import
+    networks:
+      - techmarket-network
 
   keycloak-mysql:
     image: 'mirror.gcr.io/mysql:8'
@@ -65,31 +67,20 @@ services:
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - techmarket-network
 
-  traefik:
-    image: traefik:v3.0
-    container_name: traefik
-
-    command:
-      - "--api.dashboard=true"
-      - "--providers.docker=true"
-
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-
-      # Let's Encrypt (HTTP challenge)
-      - "--certificatesresolvers.le.acme.httpchallenge=true"
-      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.le.acme.email=your-email@example.com"
-      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
-
+  nginx:
+    image: nginx:latest
+    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
-
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    networks:
+      - techmarket-network
 
   postgres-inventory:
     container_name: postgres-inventory
@@ -162,6 +153,8 @@ services:
       - '4317:4317'
       - '4318:4318'
       - "9090:9090"
+    networks:
+      - techmarket-network
 
 #TECH MARKET MICROSERVICES
 
@@ -169,10 +162,6 @@ services:
     image: juliparodi/techmarket:api-gateway
     container_name: api-gateway
     pull_policy: always
-    ports:
-      - "8181:8080"
-    expose:
-      - "8181"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
@@ -180,14 +169,6 @@ services:
       - keycloak
     networks:
       - techmarket-network
-    labels:
-      - "traefik.enable=true"
-
-      - "traefik.http.routers.gateway.rule=Host(`jpmarket.duckdns.org`)"
-      - "traefik.http.routers.gateway.entrypoints=websecure"
-      - "traefik.http.routers.gateway.tls.certresolver=le"
-
-      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
 
 
   product-service:

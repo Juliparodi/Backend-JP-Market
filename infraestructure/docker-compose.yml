@@ -70,6 +70,7 @@ services:
     networks:
       - techmarket-network
 
+
   nginx:
     image: nginx:latest
     container_name: nginx

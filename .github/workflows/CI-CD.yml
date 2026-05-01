@@ -48,7 +48,7 @@ jobs:
       with:
         context: ./${{ matrix.service }}
         push: true
-        tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}
+        tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}, juliparodi/techmarket:${{ matrix.service }}-latest
 
     - name: Update ECS task definition
       if: matrix.service == 'api-gateway'

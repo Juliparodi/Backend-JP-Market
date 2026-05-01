@@ -66,6 +66,31 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
 
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Let's Encrypt (HTTP challenge)
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=your-email@example.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
   postgres-inventory:
     container_name: postgres-inventory
     image: postgres
@@ -151,12 +176,19 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - keycloak
     networks:
       - techmarket-network
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.gateway.rule=Host(`jpmarket.duckdns.org`)"
+      - "traefik.http.routers.gateway.entrypoints=websecure"
+      - "traefik.http.routers.gateway.tls.certresolver=le"
+
+      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+
 
   product-service:
     container_name: product-service

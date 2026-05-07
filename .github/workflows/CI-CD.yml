@@ -14,6 +14,9 @@ jobs:
       matrix:
         service: [api-gateway, order-service, product-service, inventory-service, notification-service]
 
+    env:
+      AWS_FEATURE_FLAG: ${{ secrets.AWS_FEATURE_FLAG }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -51,7 +54,7 @@ jobs:
         tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}, juliparodi/techmarket:${{ matrix.service }}-latest
 
     - name: Update ECS task definition
-      if: ${{ matrix.service == 'api-gateway' &&  secrets.AWS_FEATURE_FLAG == 'true' }}
+      if: ${{ matrix.service == 'api-gateway' &&  env.AWS_FEATURE_FLAG == 'true' }}
       run: |
         SERVICE=${{ matrix.service }}
         IMAGE="juliparodi/techmarket:${SERVICE}-${{ github.sha }}"
@@ -89,7 +92,7 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
     - name: Force ECS deployment
-      if: ${{ matrix.service == 'api-gateway' &&  secrets.AWS_FEATURE_FLAG == 'true' }}
+      if: ${{ matrix.service == 'api-gateway' &&  env.AWS_FEATURE_FLAG == 'true' }}
       run: |
         aws ecs update-service \
           --cluster jp-market-cluster \

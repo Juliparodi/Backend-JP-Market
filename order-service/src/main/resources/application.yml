@@ -17,10 +17,6 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
-  logging:
-    export:
-      otlp:
-        endpoint: http://localhost:4318/v1/logs
   endpoint:
     health:
       show-details: always
@@ -81,4 +77,4 @@ resilience4j:
 server:
   port: '8081'
 inventory:
-  url: http://inventory-service:8082/api/techMarket/inventory
+  url: http://inventory-service/api/inventory

@@ -85,7 +85,7 @@ services:
 
   postgres-inventory:
     container_name: postgres-inventory
-    image: postgres
+    image: postgres:17.9
     environment:
       POSTGRES_DB: inventory-service
       POSTGRES_USER: juliparodi
@@ -131,21 +131,6 @@ services:
     volumes:
       - ./mongo-data:/data/db
 
-
-  ## Prometheus
-  prometheus:
-    image: 'mirror.gcr.io/prom/prometheus:latest'
-    container_name: prometheus
-    restart: always
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    depends_on:
-      - product-service
-      - inventory-service
-      - order-service
-      - notification-service
 
   grafana-lgtm:
     image: 'grafana/otel-lgtm:latest'

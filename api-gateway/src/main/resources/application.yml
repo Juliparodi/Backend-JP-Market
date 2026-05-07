@@ -12,10 +12,6 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
-  logging:
-    export:
-      otlp:
-        endpoint: http://localhost:4318/v1/logs
   endpoint:
     health:
       show-details: always
@@ -29,7 +25,7 @@ spring:
         webflux:
           routes:
             - id: product-service
-              uri: http://localhost:8081
+              uri: http://localhost:8082
               predicates:
                 - Path=/api/product/**
 
@@ -74,3 +70,4 @@ logging:
 server:
   port: '8080'
   forward-headers-strategy: framework
+  connection-timeout=10s:

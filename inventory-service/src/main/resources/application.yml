@@ -1,11 +1,11 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: avnadmin
-    url: jdbc:postgresql://inventory-service-juliparodi26.a.aivencloud.com:21097/defaultdb?user=avnadmin&password=${POSTGRE_PASSWORD}
+    username: juliparodi
+    url: jdbc:postgresql://localhost:5431/inventory-service
     password: ${POSTGRE_PASSWORD}
   flyway:
-    enabled: 'true'
+    enabled: true
     locations: classpath:db
   application:
     name: inventory-service
@@ -28,10 +28,6 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
-  logging:
-    export:
-      otlp:
-        endpoint: http://localhost:4318/v1/logs
   endpoint:
     health:
       show-details: always
@@ -39,4 +35,4 @@ management:
     sampling:
       probability: '1.0'
 server:
-  port: '0'
+  port: '8083'

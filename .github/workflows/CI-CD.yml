@@ -51,7 +51,7 @@ jobs:
         tags: juliparodi/techmarket:${{ matrix.service }}-${{ github.sha }}, juliparodi/techmarket:${{ matrix.service }}-latest
 
     - name: Update ECS task definition
-      if: matrix.service == 'api-gateway'
+      if: ${{ matrix.service == 'api-gateway' &&  secrets.AWS_FEATURE_FLAG == 'true' }}
       run: |
         SERVICE=${{ matrix.service }}
         IMAGE="juliparodi/techmarket:${SERVICE}-${{ github.sha }}"
@@ -89,7 +89,7 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
     - name: Force ECS deployment
-      if: matrix.service == 'api-gateway'
+      if: ${{ matrix.service == 'api-gateway' &&  secrets.AWS_FEATURE_FLAG == 'true' }}
       run: |
         aws ecs update-service \
           --cluster jp-market-cluster \

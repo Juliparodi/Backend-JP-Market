@@ -77,4 +77,4 @@ resilience4j:
 server:
   port: '8081'
 inventory:
-  url: http://inventory-service/api/inventory
+  url: http://localhost:8083/api/inventory

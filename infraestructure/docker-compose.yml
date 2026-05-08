@@ -7,6 +7,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:2181
+    networks:
+      - techmarket-network
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -22,6 +24,9 @@ services:
        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
        KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - techmarket-network
+
 
   kafka-ui:
       image: provectuslabs/kafka-ui:latest
@@ -33,6 +38,8 @@ services:
         KAFKA_CLUSTERS_0_NAME: local
         KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
         KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      networks:
+        - techmarket-network
 
   mailhog:
     image: mailhog/mailhog
@@ -40,6 +47,8 @@ services:
     ports:
       - 1025:1025  # SMTP server
       - 8025:8025  # MailHog web interface
+    networks:
+      - techmarket-network
 
   keycloak:
     image: 'quay.io/keycloak/keycloak'
@@ -99,6 +108,8 @@ services:
       - "5431:5431"
     command: -p 5431
     restart: unless-stopped
+    networks:
+      - techmarket-network
 
   mysql-order:
     container_name: mysql-inventory
@@ -115,6 +126,8 @@ services:
     ports:
       - "3306:3306"
     restart: unless-stopped
+    networks:
+      - techmarket-network
 
 
   mongo:
@@ -130,6 +143,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - ./mongo-data:/data/db
+    networks:
+      - techmarket-network
 
 
   grafana-lgtm:
@@ -163,8 +178,6 @@ services:
     image: juliparodi/techmarket:product-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - mongo
       - api-gateway
@@ -178,8 +191,6 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - mysql-order
       - kafka
@@ -193,9 +204,6 @@ services:
     image: juliparodi/techmarket:inventory-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5431/inventory-service
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - postgres-inventory
       - api-gateway
@@ -208,8 +216,6 @@ services:
     image: juliparodi/techmarket:notification-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - EUREKA_USERNAME=${EUREKA_USERNAME}
-      - EUREKA_PASSWORD=${EUREKA_PASSWORD}
     depends_on:
       - kafka
       - api-gateway

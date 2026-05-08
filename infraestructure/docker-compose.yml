@@ -168,6 +168,9 @@ services:
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
     depends_on:
       - keycloak
+      - grafana-lgtm
+    ports:
+      - "8084:8084"
     networks:
       - techmarket-network
 

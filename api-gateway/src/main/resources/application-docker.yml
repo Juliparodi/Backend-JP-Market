@@ -26,28 +26,24 @@ spring:
         jwt:
           issuer-uri: http://keycloak:8080/realms/spring-boot-microservices-realm
 server:
-  port: '8080'
+  port: '8084'
 
 management:
   endpoints:
     web:
       exposure:
         include: health,metrics,prometheus
-
-otel:
-  exporter:
-    otlp:
-      endpoint: http://grafana-lgtm:4318
-      protocol: http/protobuf
-
-  metrics:
-    exporter: otlp
-
-  traces:
-    exporter: otlp
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://grafana-lgtm:4318/v1/traces
+      sampling:
+        probability: '1.0'
+    metrics:
+      export:
+        otlp:
+          endpoint: http://grafana-lgtm:4318/v1/metrics
   endpoint:
     health:
       show-details: always
-  tracing:
-    sampling:
-      probability: '1.0'

@@ -68,6 +68,6 @@ logging:
     io.opentelemetry: DEBUG
     org.springframework.boot.actuate: DEBUG
 server:
-  port: '8080'
+  port: 8080
   forward-headers-strategy: framework
   connection-timeout=10s:

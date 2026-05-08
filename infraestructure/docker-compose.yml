@@ -166,6 +166,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
+      - SERVER_PORT=8084
+      - MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT=http://grafana-lgtm:4318/v1/traces
+      - MANAGEMENT_OPENTELEMETRY_METRICS_EXPORT_OTLP_ENDPOINT=http://grafana-lgtm:4318/v1/metrics
     depends_on:
       - keycloak
       - grafana-lgtm

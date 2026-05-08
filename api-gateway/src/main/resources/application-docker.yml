@@ -24,9 +24,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/spring-boot-microservices-realm
+          issuer-uri: http://keycloak:8080/realms/techmarket-realm
 server:
-  port: '8084'
+  port: 8084
 
 management:
   endpoints:

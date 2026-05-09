@@ -37,6 +37,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
             } else {
                 log.debug("saving order..");
                 orderService.saveOrder(order);
+                log.debug("sending event..");
                 sendEvent(order);
                 return "Order placed successfully";
             }

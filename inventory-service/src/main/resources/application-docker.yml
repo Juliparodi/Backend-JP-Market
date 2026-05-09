@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: juliparodi
-    url: jdbc:postgresql://postgres:5431/inventory-service
+    url: jdbc:postgresql://postgres-inventory:5431/inventory-service
     password: ${POSTGRE_PASSWORD}
   flyway:
     enabled: 'true'

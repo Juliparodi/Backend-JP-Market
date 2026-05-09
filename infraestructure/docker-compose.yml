@@ -203,7 +203,7 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_PASSWORD= ${MYSQL_PASSWORD}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
     depends_on:
       - mysql-order
       - kafka
@@ -217,6 +217,7 @@ services:
     image: juliparodi/techmarket:inventory-service-latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRE_PASSWORD}
     depends_on:
       - postgres-inventory
       - api-gateway

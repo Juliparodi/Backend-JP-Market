@@ -24,7 +24,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://host.docker.internal:8181/realms/techmarket-realm
+          issuer-uri: http://localhost:8181/realms/techmarket-realm
+          jwk-set-uri: http://keycloak:8080/realms/techmarket-realm/protocol/openid-connect/certs
 server:
   port: 8084
 

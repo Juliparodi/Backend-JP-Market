@@ -161,15 +161,11 @@ services:
 #TECH MARKET MICROSERVICES
 
   api-gateway:
-    image: juliparodi/techmarket:api-gateway
+    image: juliparodi/techmarket:api-gateway-latest
     container_name: api-gateway
-    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
-      - SERVER_PORT=8084
-      - MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT=http://grafana-lgtm:4318/v1/traces
-      - MANAGEMENT_OPENTELEMETRY_METRICS_EXPORT_OTLP_ENDPOINT=http://grafana-lgtm:4318/v1/metrics
     depends_on:
       - keycloak
       - grafana-lgtm
@@ -177,12 +173,14 @@ services:
       - "8084:8084"
     networks:
       - techmarket-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 
   product-service:
     container_name: product-service
     pull_policy: always
-    image: juliparodi/techmarket:product-service
+    image: juliparodi/techmarket:product-service-latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -194,7 +192,7 @@ services:
 
   order-service:
     container_name: order-service
-    image: juliparodi/techmarket:order-service
+    image: juliparodi/techmarket:order-service-latest
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
@@ -208,7 +206,7 @@ services:
   inventory-service:
     container_name: inventory-service
     pull_policy: always
-    image: juliparodi/techmarket:inventory-service
+    image: juliparodi/techmarket:inventory-service-latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -218,7 +216,7 @@ services:
       - techmarket-network
 
   notification-service:
-    container_name: notification-service
+    container_name: notification-service-latest
     pull_policy: always
     image: juliparodi/techmarket:notification-service
     environment:

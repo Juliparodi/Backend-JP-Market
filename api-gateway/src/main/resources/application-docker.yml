@@ -24,7 +24,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/techmarket-realm
+          issuer-uri: http://host.docker.internal:8181/realms/techmarket-realm
 server:
   port: 8084
 
@@ -48,3 +48,5 @@ management:
   tracing:
     sampling:
       probability: '1.0'
+test:
+  profile: docker-loaded

@@ -9,6 +9,9 @@ infraestructure/.env
 infraestructure/mongo-data
 infraestructure/mysql-order
 infraestructure/mysql_keycloak_data
+infraestructure/keycloak
+infraestructure/certs
+infraestructure/postgres-order
 mongo-data
 
 ### IntelliJ IDEA ###

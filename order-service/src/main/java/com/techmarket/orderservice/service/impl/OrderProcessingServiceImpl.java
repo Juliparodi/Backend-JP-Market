@@ -7,6 +7,7 @@ import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private final IOrderService orderService;
@@ -29,9 +31,11 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
         long startTime = System.currentTimeMillis();
         try {
             inventoryService.processAndValidateStock(skuCodes);
+            log.debug("Call to inventory took: {} ms", System.currentTimeMillis() - startTime);
             if (System.currentTimeMillis() - startTime >= 4000) {
                 throw new TimeoutException();
             } else {
+                log.debug("saving order..");
                 orderService.saveOrder(order);
                 sendEvent(order);
                 return "Order placed successfully";

@@ -36,3 +36,7 @@ management:
       probability: '1.0'
 server:
   port: '8083'
+logging:
+  level:
+    root: INFO
+    com.techmarket: DEBUG

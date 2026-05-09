@@ -38,3 +38,8 @@ management:
   tracing:
     sampling:
       probability: '1.0'
+
+logging:
+  level:
+    root: INFO
+    com.techmarket: DEBUG

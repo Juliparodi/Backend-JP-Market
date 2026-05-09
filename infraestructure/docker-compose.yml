@@ -119,7 +119,7 @@ services:
       - techmarket-network
 
   mysql-order:
-    container_name: mysql-inventory
+    container_name: mysql-order
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: order-service
@@ -203,6 +203,7 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_PASSWORD= ${MYSQL_PASSWORD}
     depends_on:
       - mysql-order
       - kafka

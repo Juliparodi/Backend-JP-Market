@@ -5,17 +5,17 @@ spring:
         webflux:
           routes:
             - id: product-service
-              uri: http://product-service:8080
+              uri: http://product-service:8082
               predicates:
                 - Path=/api/product/**
 
             - id: order-service
-              uri: http://order-service:8080
+              uri: http://order-service:8081
               predicates:
                 - Path=/api/order/**
 
             - id: inventory-service
-              uri: http://inventory-service:8080
+              uri: http://inventory-service:8083
               predicates:
                 - Path=/api/inventory/**,/api/category/**,/api/promotion/**
   application:
@@ -49,5 +49,3 @@ management:
   tracing:
     sampling:
       probability: '1.0'
-test:
-  profile: docker-loaded

@@ -34,4 +34,4 @@ spring:
   application:
     name: product-service
 server:
-  port: '0'
+  port: 8082

@@ -15,3 +15,23 @@ spring:
   mail:
     host: mailhog
     username:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  otlp:
+    metrics:
+      export:
+        url: http://grafana-lgtm:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://grafana-lgtm:4318/v1/traces
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: '1.0'

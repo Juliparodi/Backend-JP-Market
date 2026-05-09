@@ -149,6 +149,7 @@ services:
 
   grafana-lgtm:
     image: 'grafana/otel-lgtm:latest'
+    container_name: grafana-lgtm
     ports:
       - '3000:3000'
       - '4317:4317'

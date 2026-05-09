@@ -33,17 +33,18 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
+  otlp:
+    metrics:
+      export:
+        url: http://grafana-lgtm:4318/v1/metrics
   opentelemetry:
     tracing:
       export:
         otlp:
           endpoint: http://grafana-lgtm:4318/v1/traces
-      sampling:
-        probability: '1.0'
-    metrics:
-      export:
-        otlp:
-          endpoint: http://grafana-lgtm:4318/v1/metrics
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: '1.0'

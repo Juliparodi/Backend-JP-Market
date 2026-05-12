@@ -19,7 +19,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @KafkaListener(topics = "orderTopic")
     public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
-        String orderNumber = orderPlacedEvent.getOrderNumber();
+        String orderNumber = orderPlacedEvent.orderNumber();
         String subject = "Order #" + orderNumber + " Confirmation";
         String congrats = "Congrats! Order nro: " + orderNumber + " succesfully created";
         log.info("ACK: {}", orderNumber);

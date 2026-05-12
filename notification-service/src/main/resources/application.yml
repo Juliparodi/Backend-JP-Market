@@ -32,10 +32,13 @@ spring:
     template:
       default-topic: orderTopic
     consumer:
-      group-id: notificationId
+      auto-offset-reset: earliest
+      group-id: techmarket-group
       properties:
         spring:
           json:
+            trusted:
+              packages: org.techmarket.event
             type:
               mapping: event:org.techmarket.event.OrderPlacedEvent
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

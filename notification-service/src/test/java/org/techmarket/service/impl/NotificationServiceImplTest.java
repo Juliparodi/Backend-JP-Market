@@ -27,8 +27,7 @@ public class NotificationServiceImplTest {
   @Test
   void whenHandleNotification_thenShouldSendEmail() {
     // Given
-    OrderPlacedEvent event = new OrderPlacedEvent();
-    event.setOrderNumber("12345");
+    OrderPlacedEvent event = new OrderPlacedEvent("12345");
 
     // When
     notificationService.handleNotification(event);

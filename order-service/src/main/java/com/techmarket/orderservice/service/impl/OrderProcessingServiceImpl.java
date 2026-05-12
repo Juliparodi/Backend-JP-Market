@@ -21,7 +21,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private final IOrderService orderService;
     private final InventoryService inventoryService;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Override
     public String placeOrder(OrderRequestDTO orderRequest) {

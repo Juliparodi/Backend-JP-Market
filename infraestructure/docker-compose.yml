@@ -25,7 +25,6 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
-      # Required for KRaft
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
     networks:

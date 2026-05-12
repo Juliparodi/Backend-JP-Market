@@ -224,9 +224,9 @@ services:
       - techmarket-network
 
   notification-service:
-    container_name: notification-service-latest
+    container_name: notification-service
     pull_policy: always
-    image: juliparodi/techmarket:notification-service
+    image: juliparodi/techmarket:notification-service-latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:

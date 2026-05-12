@@ -59,7 +59,7 @@ public class IntegrationTestKafka {
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "notificationId");
-        consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // Important for tests
+        consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         kafkaProducer = new KafkaProducer<>(producerProps);
         kafkaConsumer = new KafkaConsumer<>(consumerProps);

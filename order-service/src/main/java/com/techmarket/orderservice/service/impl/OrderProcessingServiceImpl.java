@@ -25,28 +25,47 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     @Override
     public String placeOrder(OrderRequestDTO orderRequest) {
+
         Order order = orderService.createOrder(orderRequest);
         List<String> skuCodes = orderService.extractSkuCodes(order);
 
         long startTime = System.currentTimeMillis();
+
         try {
             inventoryService.processAndValidateStock(skuCodes);
+
             log.debug("Call to inventory took: {} ms", System.currentTimeMillis() - startTime);
+
             if (System.currentTimeMillis() - startTime >= 4000) {
-                throw new TimeoutException();
-            } else {
-                log.debug("saving order..");
-                orderService.saveOrder(order);
-                log.debug("sending event..");
-                sendEvent(order);
-                return "Order placed successfully";
+                throw new TimeoutException("Inventory timeout");
             }
+
+            orderService.saveOrder(order);
+            log.debug("Order saved");
+
+            sendEvent(order);
+
+            return "Order placed successfully";
+
         } catch (TimeoutException e) {
-            throw new RuntimeException(e);
+            log.error("Timeout while placing order {}", order.getOrderNumber(), e);
+            throw new RuntimeException("Timeout while placing order", e);
         }
     }
 
     private void sendEvent(Order order) {
-        kafkaTemplate.send("orderTopic", new OrderPlacedEvent(order.getOrderNumber()));
+        kafkaTemplate.send("orderTopic", new OrderPlacedEvent(order.getOrderNumber()))
+                .whenComplete((result, ex) -> {
+
+                    if (ex != null) {
+                        log.error("Failed to send Kafka event for order {}",
+                                order.getOrderNumber(), ex);
+                    } else {
+                        log.info("Kafka event sent successfully to topic: {} partition: {} offset: {}",
+                                result.getRecordMetadata().topic(),
+                                result.getRecordMetadata().partition(),
+                                result.getRecordMetadata().offset());
+                    }
+                });
     }
 }

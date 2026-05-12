@@ -41,3 +41,6 @@ logging:
   level:
     root: INFO
     com.techmarket: DEBUG
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG
+    org.springframework.messaging: DEBUG

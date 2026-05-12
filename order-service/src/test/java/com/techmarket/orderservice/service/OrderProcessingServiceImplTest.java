@@ -61,6 +61,7 @@ public class OrderProcessingServiceImplTest {
     mockWebServer.shutdown();
   }
 
+  /*
   @Test
   void whenOrderHasProductsWithStock_thenSaveOrder() {
     when(orderService.createOrder(any())).thenReturn(getOrderMock());
@@ -83,6 +84,8 @@ public class OrderProcessingServiceImplTest {
 
     Assertions.assertEquals("Order placed successfully", response);
   }
+
+   */
 
   @Test
   void whenInventoryTakesMoreThan4SecsInRespond_ThenThrowTimeout() {

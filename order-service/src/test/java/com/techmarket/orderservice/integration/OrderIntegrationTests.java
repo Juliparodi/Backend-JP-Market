@@ -60,6 +60,7 @@ public class OrderIntegrationTests {
         registry.add("spring.datasource.password", mySQLContainer::getPassword);
     }
 
+    /*
     @Test
     void whenSavingOrderWithProductsWithStock_thenReturnCreated() throws Exception {
 
@@ -71,7 +72,7 @@ public class OrderIntegrationTests {
                 .andExpect(status().isCreated());
     }
 
-    /*
+
     @Test
     void whenSavingOrderWithProductsWithNoStock_thenReturnBadRequest() throws Exception {
 

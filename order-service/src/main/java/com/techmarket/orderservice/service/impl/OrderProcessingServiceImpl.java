@@ -54,17 +54,14 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
     }
 
     private void sendEvent(Order order) {
-        kafkaTemplate.send("orderTopic", new OrderPlacedEvent(order.getOrderNumber()))
-                .whenComplete((result, ex) -> {
 
+        OrderPlacedEvent event = new OrderPlacedEvent(order.getOrderNumber());
+
+        kafkaTemplate.send("orderTopic", event)
+                .whenComplete((result, ex) -> {
                     if (ex != null) {
-                        log.error("Failed to send Kafka event for order {}",
-                                order.getOrderNumber(), ex);
-                    } else {
-                        log.info("Kafka event sent successfully to topic: {} partition: {} offset: {}",
-                                result.getRecordMetadata().topic(),
-                                result.getRecordMetadata().partition(),
-                                result.getRecordMetadata().offset());
+                        log.error("Kafka publish failed for order {}", order.getOrderNumber(), ex);
+                        // optional: store to DB / retry / DLQ
                     }
                 });
     }

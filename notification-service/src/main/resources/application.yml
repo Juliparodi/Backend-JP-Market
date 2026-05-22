@@ -42,7 +42,7 @@ spring:
             type:
               mapping: event:org.techmarket.event.OrderPlacedEvent
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
     bootstrap-servers: localhost:29092
   mail:
     host: localhost

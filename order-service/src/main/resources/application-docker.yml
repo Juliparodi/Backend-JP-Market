@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: kafka:29092
+    bootstrap-servers: kafka:9092
   datasource:
     url: jdbc:mysql://mysql-order:3306/order-service
     username: juliparodi

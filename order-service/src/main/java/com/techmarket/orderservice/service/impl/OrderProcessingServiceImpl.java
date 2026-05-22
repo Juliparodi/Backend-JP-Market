@@ -45,11 +45,16 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
             sendEvent(order);
 
+            log.debug("Order placer succesfully");
+
             return "Order placed successfully";
 
         } catch (TimeoutException e) {
             log.error("Timeout while placing order {}", order.getOrderNumber(), e);
             throw new RuntimeException("Timeout while placing order", e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Unexpected exception", e);
         }
     }
 

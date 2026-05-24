@@ -48,3 +48,6 @@ logging:
     org.apache.kafka: DEBUG
     org.springframework.kafka: DEBUG
     org.springframework.messaging: DEBUG
+    org.apache.kafka.clients.producer: DEBUG
+    org.apache.kafka.clients.NetworkClient: DEBUG
+    org.apache.kafka.clients: DEBUG

@@ -35,7 +35,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   kafka:
     producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: order-service-producer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       properties:
         spring:
           json:

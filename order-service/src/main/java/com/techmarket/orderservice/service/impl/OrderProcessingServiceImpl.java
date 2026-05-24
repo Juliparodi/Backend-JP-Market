@@ -9,9 +9,11 @@ import com.techmarket.orderservice.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 @Service
@@ -21,7 +23,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private final IOrderService orderService;
     private final InventoryService inventoryService;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Override
     public String placeOrder(OrderRequestDTO orderRequest) {
@@ -58,16 +60,16 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
         }
     }
 
-    private void sendEvent(Order order) {
+    private void sendEvent(Order order) throws ExecutionException, InterruptedException {
 
         OrderPlacedEvent event = new OrderPlacedEvent(order.getOrderNumber());
 
-        kafkaTemplate.send("orderTopic", event)
-                .whenComplete((result, ex) -> {
-                    if (ex != null) {
-                        log.error("Kafka publish failed for order {}", order.getOrderNumber(), ex);
-                        // optional: store to DB / retry / DLQ
-                    }
-                });
+        SendResult<String, OrderPlacedEvent> sendResult = kafkaTemplate.send(
+                "orderTopic", event.orderNumber(), event).get();
+
+        String topic = sendResult.getRecordMetadata().topic();
+        int partition = sendResult.getRecordMetadata().partition();
+
+        log.info("Produced to topic: {}, partition: {} Avro data: {}", topic, partition, event);
     }
 }

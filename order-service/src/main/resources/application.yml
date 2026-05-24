@@ -37,11 +37,6 @@ spring:
     producer:
       client-id: order-service-producer
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
-      properties:
-        spring:
-          json:
-            type:
-              mapping: event:com.techmarket.orderservice.event.OrderPlacedEvent
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       bootstrap-servers: localhost:29092
     template:

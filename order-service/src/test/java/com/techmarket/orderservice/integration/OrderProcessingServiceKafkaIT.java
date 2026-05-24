@@ -8,51 +8,47 @@ import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.kafka.KafkaContainer;
-import org.testcontainers.utility.DockerImageName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
+@EmbeddedKafka(
+        topics = "orderTopic",
+        partitions = 1
+)
+@TestPropertySource(properties = {
+        "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}"
+})
 public class OrderProcessingServiceKafkaIT {
-
-    @Container
-    static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:latest"))
-            .withReuse(false);
-
-    @DynamicPropertySource
-    static void overrideProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-    }
 
     @Autowired
     private OrderProcessingServiceImpl service;
+
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @MockitoBean
     private IOrderService orderService;
@@ -60,27 +56,46 @@ public class OrderProcessingServiceKafkaIT {
     @MockitoBean
     private InventoryService inventoryService;
 
-    private KafkaConsumer<String, OrderPlacedEvent> consumer;
+    private org.apache.kafka.clients.consumer.Consumer<String, OrderPlacedEvent> consumer;
+
 
     @BeforeEach
-    void setupConsumer() {
-        kafka.start();
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "techmarket-group");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    void setUp() {
 
-        consumer = new KafkaConsumer<>(
-                props,
-                new StringDeserializer(),
-                new JacksonJsonDeserializer<>(OrderPlacedEvent.class, false)
+        Map<String, Object> consumerProps =
+                KafkaTestUtils.consumerProps(
+                        "test-group",
+                        "false",
+                        embeddedKafkaBroker
+                );
+
+        JacksonJsonDeserializer<OrderPlacedEvent> deserializer =
+                new JacksonJsonDeserializer<>(OrderPlacedEvent.class);
+
+        deserializer.addTrustedPackages("*");
+
+        consumer =
+                new DefaultKafkaConsumerFactory<>(
+                        consumerProps,
+                        new StringDeserializer(),
+                        deserializer
+                ).createConsumer();
+
+        embeddedKafkaBroker.consumeFromAnEmbeddedTopic(
+                consumer,
+                "orderTopic"
         );
+    }
 
-        consumer.subscribe(List.of("orderTopic"));
+    @AfterEach
+    void tearDown() {
+        if (consumer != null) {
+            consumer.close();
+        }
     }
 
     @Test
-    void shouldSendKafkaEventWhenOrderIsPlaced() throws Exception {
+    void shouldSendKafkaEventWhenOrderIsPlaced() {
 
         // given
         OrderRequestDTO request = new OrderRequestDTO();
@@ -88,34 +103,44 @@ public class OrderProcessingServiceKafkaIT {
         Order order = new Order();
         order.setOrderNumber("ORDER-123");
 
-        when(orderService.createOrder(request)).thenReturn(order);
-        when(orderService.extractSkuCodes(order)).thenReturn(List.of("SKU1", "SKU2"));
+        when(orderService.createOrder(request))
+                .thenReturn(order);
 
-        doNothing().when(inventoryService).processAndValidateStock(anyList());
-        doNothing().when(orderService).saveOrder(order);
+        when(orderService.extractSkuCodes(order))
+                .thenReturn(List.of("SKU1", "SKU2"));
+
+        doNothing()
+                .when(inventoryService)
+                .processAndValidateStock(anyList());
+
+        doNothing()
+                .when(orderService)
+                .saveOrder(order);
 
         // when
         String result = service.placeOrder(request);
 
         // then
-        assertEquals("Order placed successfully", result);
-
-        // verify Kafka message
-        ConsumerRecords<String, OrderPlacedEvent> records =
-                consumer.poll(Duration.ofSeconds(5));
-
-        assertThat(records.count()).isGreaterThan(0);
+        assertThat(result)
+                .isEqualTo("Order placed successfully");
 
         ConsumerRecord<String, OrderPlacedEvent> record =
-                records.iterator().next();
+                KafkaTestUtils.getSingleRecord(
+                        consumer,
+                        "orderTopic",
+                        Duration.ofSeconds(10)
+                );
 
-        assertEquals("ORDER-123", record.value().orderNumber());
+        assertThat(record).isNotNull();
 
-    }
+        assertThat(record.key())
+                .isEqualTo("ORDER-123");
 
-    @AfterEach
-    void tearDown() {
-        consumer.close();
+        assertThat(record.value())
+                .isNotNull();
+
+        assertThat(record.value().orderNumber())
+                .isEqualTo("ORDER-123");
     }
 
 }

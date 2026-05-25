@@ -5,8 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.techmarket.event.OrderItemEvent;
 import org.techmarket.event.OrderPlacedEvent;
 import org.techmarket.service.IEmailService;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -24,19 +30,29 @@ public class NotificationServiceImplTest {
     notificationService = new NotificationServiceImpl(emailService);
   }
 
+
   @Test
   void whenHandleNotification_thenShouldSendEmail() {
+
     // Given
-    OrderPlacedEvent event = new OrderPlacedEvent("12345");
+    OrderPlacedEvent event = new OrderPlacedEvent(
+            UUID.randomUUID(),
+            1L,
+            "12345",
+            LocalDateTime.now(),
+            List.of(
+                    new OrderItemEvent("sku-1", 2, BigDecimal.valueOf(10.0))
+            )
+    );
 
     // When
     notificationService.handleNotification(event);
 
     // Then
     verify(emailService).sendMessage(
-        eq("julianparodi19@gmail.com"),
-        eq("Order #12345 Confirmation"),
-        eq("Congrats! Order nro: 12345 succesfully created")
+            eq("julianparodi19@gmail.com"),
+            eq("Order #12345 Confirmation"),
+            eq("Congrats! Order nro: 12345 succesfully created")
     );
   }
 }

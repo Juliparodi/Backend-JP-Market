@@ -6,6 +6,7 @@ import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
+import com.techmarket.orderservice.service.mapper.OrderEventMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,6 +25,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
     private final IOrderService orderService;
     private final InventoryService inventoryService;
     private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+    private final OrderEventMapper orderEventMapper;
 
     @Override
     public String placeOrder(OrderRequestDTO orderRequest) {
@@ -45,7 +47,10 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
             orderService.saveOrder(order);
             log.debug("Order saved");
 
-            sendEvent(order);
+            OrderPlacedEvent event =
+                    orderEventMapper.toOrderPlacedEvent(order);
+
+            sendEvent(event);
 
             log.debug("Order placer succesfully");
 
@@ -60,9 +65,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
         }
     }
 
-    private void sendEvent(Order order) throws ExecutionException, InterruptedException {
-
-        OrderPlacedEvent event = new OrderPlacedEvent(order.getOrderNumber());
+    private void sendEvent(OrderPlacedEvent event) throws ExecutionException, InterruptedException {
 
         SendResult<String, OrderPlacedEvent> sendResult = kafkaTemplate.send(
                 "orderTopic", event.orderNumber(), event).get();

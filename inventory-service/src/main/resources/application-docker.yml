@@ -8,7 +8,7 @@ spring:
     enabled: 'true'
     locations: classpath:db
   kafka:
-    bootstrap-servers: broker:29092
+    bootstrap-servers: kafka:9092
 management:
   endpoints:
     web:

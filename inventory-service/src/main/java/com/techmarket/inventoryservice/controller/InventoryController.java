@@ -23,4 +23,5 @@ public class InventoryController {
         log.debug("Entering inventory service...");
         return inventoryService.isInStock(skuCode);
     }
+
 }

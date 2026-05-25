@@ -16,8 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -26,13 +27,13 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
@@ -41,15 +42,12 @@ import static org.mockito.Mockito.when;
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext
 public class OrderProcessingServiceKafkaIT {
 
     @Container
     static final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:latest"))
             .withReuse(false);
-
-    static {
-        kafka.start();
-    }
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
@@ -84,6 +82,10 @@ public class OrderProcessingServiceKafkaIT {
         consumer.subscribe(List.of("orderTopic"));
     }
 
+    @Autowired
+    Environment env;
+
+
     @Test
     void shouldSendKafkaEventWhenOrderIsPlaced() {
 
@@ -99,6 +101,9 @@ public class OrderProcessingServiceKafkaIT {
         doNothing().when(inventoryService).processAndValidateStock(anyList());
         doNothing().when(orderService).saveOrder(order);
 
+        System.out.println("PROPERTY" +
+                env.getProperty("spring.kafka.bootstrap-servers")
+        );
         // when
         String result = service.placeOrder(request);
 

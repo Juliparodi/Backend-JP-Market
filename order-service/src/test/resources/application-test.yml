@@ -1,4 +1,6 @@
 spring:
+  kafka:
+    bootstrap-servers: localhost:0
   application:
     name: order-service
 

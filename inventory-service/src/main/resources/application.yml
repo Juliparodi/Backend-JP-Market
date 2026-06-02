@@ -9,9 +9,9 @@ spring:
         spring:
           json:
             trusted:
-              packages: org.techmarket.event
+              packages: com.techmarket.inventoryservice.domain.event
             type:
-              mapping: event:org.techmarket.event.OrderPlacedEvent
+              mapping: event:com.techmarket.inventoryservice.domain.event.OrderPlacedEvent
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
     bootstrap-servers: localhost:29092

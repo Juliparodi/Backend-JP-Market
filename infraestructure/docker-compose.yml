@@ -225,6 +225,7 @@ services:
     depends_on:
       - postgres-inventory
       - api-gateway
+      - kafka
     networks:
       - techmarket-network
 

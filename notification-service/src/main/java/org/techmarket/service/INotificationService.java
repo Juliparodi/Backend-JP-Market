@@ -1,6 +1,6 @@
 package org.techmarket.service;
 
-import org.techmarket.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 
 public interface INotificationService {
 

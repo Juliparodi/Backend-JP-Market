@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.techmarket.event.OrderItemEvent;
-import org.techmarket.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 import org.techmarket.service.IEmailService;
 
 import java.math.BigDecimal;
@@ -35,15 +35,13 @@ public class NotificationServiceImplTest {
   void whenHandleNotification_thenShouldSendEmail() {
 
     // Given
-    OrderPlacedEvent event = new OrderPlacedEvent(
-            UUID.randomUUID(),
-            1L,
-            "12345",
-            LocalDateTime.now(),
-            List.of(
-                    new OrderItemEvent("sku-1", 2, BigDecimal.valueOf(10.0))
-            )
-    );
+    OrderPlacedEvent event = OrderPlacedEvent.newBuilder()
+            .setEventId(UUID.randomUUID().toString())
+            .setOrderId(1L)
+            .setOrderNumber("12345")
+            .setCreatedDate(LocalDateTime.now().toString())
+            .setItems(java.util.Collections.emptyList())
+            .build();
 
     // When
     notificationService.handleNotification(event);

@@ -33,16 +33,12 @@ spring:
       default-topic: orderTopic
     consumer:
       auto-offset-reset: earliest
-      group-id: techmarket-group
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: org.techmarket.event
-            type:
-              mapping: event:org.techmarket.event.OrderPlacedEvent
+      group-id: notification-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        specific.avro.reader: true
     bootstrap-servers: localhost:29092
   mail:
     host: localhost

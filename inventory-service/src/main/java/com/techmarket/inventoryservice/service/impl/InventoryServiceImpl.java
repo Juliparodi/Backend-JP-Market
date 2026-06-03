@@ -2,8 +2,8 @@ package com.techmarket.inventoryservice.service.impl;
 
 import com.techmarket.inventoryservice.domain.dto.InventoryResponse;
 import com.techmarket.inventoryservice.domain.entities.Inventory;
-import com.techmarket.inventoryservice.domain.event.OrderItemEvent;
-import com.techmarket.inventoryservice.domain.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderItemEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 import com.techmarket.inventoryservice.repository.InventoryRepository;
 import com.techmarket.inventoryservice.service.IInventoryService;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +45,11 @@ public class InventoryServiceImpl implements IInventoryService {
     public void updateInventory(OrderPlacedEvent orderPlacedEvent) {
 
         Map<String, Integer> orderedQuantities =
-                orderPlacedEvent.items()
+                orderPlacedEvent.getItems()
                         .stream()
                         .collect(Collectors.toMap(
-                                OrderItemEvent::skuCode,
-                                OrderItemEvent::quantity
+                                OrderItemEvent::getSkuCode,
+                                OrderItemEvent::getQuantity
                         ));
 
         List<Inventory> updatedInventories =
@@ -72,7 +72,7 @@ public class InventoryServiceImpl implements IInventoryService {
 
         inventoryRepository.saveAll(updatedInventories);
 
-        log.info("Inventory updated for order {}", orderPlacedEvent.orderNumber());
+        log.info("Inventory updated for order {}", orderPlacedEvent.getOrderNumber());
     }
 
 }

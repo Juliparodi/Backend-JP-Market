@@ -2,7 +2,7 @@ package com.techmarket.orderservice.service.impl;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
-import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
@@ -68,7 +68,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
     private void sendEvent(OrderPlacedEvent event) throws ExecutionException, InterruptedException {
 
         SendResult<String, OrderPlacedEvent> sendResult = kafkaTemplate.send(
-                "orderTopic", event.orderNumber(), event).get();
+                "orderTopic", event.getOrderNumber(), event).get();
 
         String topic = sendResult.getRecordMetadata().topic();
         int partition = sendResult.getRecordMetadata().partition();

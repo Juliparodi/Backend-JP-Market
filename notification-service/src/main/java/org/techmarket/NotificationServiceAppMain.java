@@ -3,7 +3,7 @@ package org.techmarket;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.techmarket.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 
 @SpringBootApplication
 public class NotificationServiceAppMain {

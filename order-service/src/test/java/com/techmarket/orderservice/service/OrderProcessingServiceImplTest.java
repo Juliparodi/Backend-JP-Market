@@ -2,7 +2,7 @@ package com.techmarket.orderservice.service;
 
 import com.techmarket.orderservice.domain.dto.OrderLineItemsDTO;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
-import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

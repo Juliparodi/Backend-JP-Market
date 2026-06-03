@@ -34,6 +34,9 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
+    - name: Build root and shared modules
+      run: mvn clean install -DskipTests
+
     - name: Build service with Maven
       run: mvn -pl ${{ matrix.service }} -am clean install
 

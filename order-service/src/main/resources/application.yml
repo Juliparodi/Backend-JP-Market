@@ -36,8 +36,11 @@ spring:
   kafka:
     producer:
       client-id: order-service-producer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        enable.idempotence: true
     template:
       default-topic: orderTopic
   flyway:

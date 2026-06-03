@@ -2,7 +2,7 @@ package com.techmarket.orderservice.integration;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
-import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
+import com.techmarket.schema.OrderPlacedEvent;
 import com.techmarket.orderservice.service.IOrderService;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
@@ -119,7 +119,7 @@ public class OrderProcessingServiceKafkaIT {
         ConsumerRecord<String, OrderPlacedEvent> record =
                 records.iterator().next();
 
-        assertEquals("ORDER-123", record.value().orderNumber());
+        assertEquals("ORDER-123", record.value().getOrderNumber());
 
     }
 

@@ -21,6 +21,7 @@
         <module>inventory-service</module>
         <module>api-gateway</module>
         <module>notification-service</module>
+        <module>schema-registry</module>
     </modules>
 
     <properties>
@@ -81,7 +82,12 @@
         </dependency>
     </dependencies>
 
-
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>

@@ -41,8 +41,8 @@ spring:
       server:
         webflux:
           httpclient:
-            connect-timeout: 10000
-            response-timeout: 10000
+            connect-timeout: 15000
+            response-timeout: 15000
           routes:
             - id: product-service
               uri: http://localhost:8082
@@ -51,8 +51,8 @@ spring:
               filters:
                 - name: RateLimit
                   args:
-                    replenishRate: 10
-                    burstCapacity: 10
+                    replenishRate: 4
+                    burstCapacity: 4
                 - name: CircuitBreaker
                   args:
                     name: product-service
@@ -64,8 +64,8 @@ spring:
               filters:
                 - name: RateLimit
                   args:
-                    replenishRate: 15
-                    burstCapacity: 15
+                    replenishRate: 4
+                    burstCapacity: 4
                 - name: CircuitBreaker
                   args:
                     name: order-service
@@ -77,8 +77,8 @@ spring:
               filters:
                 - name: RateLimit
                   args:
-                    replenishRate: 12
-                    burstCapacity: 12
+                    replenishRate: 4
+                    burstCapacity: 4
                 - name: CircuitBreaker
                   args:
                     name: inventory-service

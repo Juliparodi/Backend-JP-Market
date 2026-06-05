@@ -10,17 +10,6 @@ import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Custom Rate Limiting Gateway Filter Factory
- * Implements sliding window rate limiting per client IP address
- * <p>
- * Usage in application.yml:
- * routes:
- *   - id: order-service
- *     uri: http://localhost:8081
- *     filters:
- *       - RateLimit=100,60000  # 100 requests per 60 seconds
- */
 @Component
 public class RateLimitGatewayFilterFactory
         extends AbstractGatewayFilterFactory<RateLimitGatewayFilterFactory.Config> {
@@ -28,7 +17,7 @@ public class RateLimitGatewayFilterFactory
     private final ConcurrentHashMap<String, AtomicInteger> requestCounts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Instant> windowStarts = new ConcurrentHashMap<>();
 
-    private static final int DEFAULT_MAX_REQUESTS = 100;
+    private static final int DEFAULT_MAX_REQUESTS = 5;
     private static final long DEFAULT_WINDOW_SIZE = 60_000; // 1 minute
 
     public RateLimitGatewayFilterFactory() {

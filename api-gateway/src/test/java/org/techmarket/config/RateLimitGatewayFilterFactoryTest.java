@@ -217,10 +217,10 @@ class RateLimitGatewayFilterFactoryTest {
     @Test
     void testConfigWithCustomValues() {
         // Arrange
-        RateLimitGatewayFilterFactory.Config config = new RateLimitGatewayFilterFactory.Config(100, 120_000);
+        RateLimitGatewayFilterFactory.Config config = new RateLimitGatewayFilterFactory.Config(5, 120_000);
 
         // Assert
-        assertEquals(100, config.getMaxRequests());
+        assertEquals(5, config.getMaxRequests());
         assertEquals(120_000, config.getWindowSize());
     }
 
@@ -233,7 +233,7 @@ class RateLimitGatewayFilterFactoryTest {
         RateLimitGatewayFilterFactory.Config config = new RateLimitGatewayFilterFactory.Config();
 
         // Assert
-        assertEquals(100, config.getMaxRequests(), "Default maxRequests should be 100");
+        assertEquals(5, config.getMaxRequests(), "Default maxRequests should be 100");
         assertEquals(60_000, config.getWindowSize(), "Default windowSize should be 60000ms");
     }
 }

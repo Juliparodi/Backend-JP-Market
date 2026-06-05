@@ -3,73 +3,91 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
+
   endpoint:
     health:
       show-details: always
       probes:
         enabled: true
+
   otlp:
     metrics:
       export:
         url: http://localhost:4318/v1/metrics
+
   opentelemetry:
     tracing:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
+
   tracing:
     sampling:
-      probability: '1.0'
+      probability: 1.0
+
 
 spring:
-  cloud:
-    gateway:
-      httpclient:
-        connect-timeout: 5000
-        response-timeout: 10000
-      server:
-        webflux:
-          routes:
-            - id: product-service
-              uri: http://localhost:8082
-              predicates:
-                - Path=/api/product/**
-              filters:
-                - RateLimit=10,60000
-                - CircuitBreaker=product-service
-              metadata:
-                connect-timeout: 5000
-                response-timeout: 10000
-
-            - id: order-service
-              uri: http://localhost:8081
-              predicates:
-                - Path=/api/order/**
-              filters:
-                - RateLimit=15,60000
-                - CircuitBreaker=order-service
-              metadata:
-                connect-timeout: 5000
-                response-timeout: 10000
-
-            - id: inventory-service
-              uri: http://localhost:8083
-              predicates:
-                - Path=/api/inventory/**,/api/category/**,/api/promotion/**
-              filters:
-                - RateLimit=12,60000
-                - CircuitBreaker=inventory-service
-              metadata:
-                connect-timeout: 5000
-                response-timeout: 10000
-
   application:
     name: api-gateway
+
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8181/realms/techmarket-realm
+
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 10000   # 10s
+        response-timeout: 10000  # 10s
+
+      routes:
+        - id: product-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - name: RateLimit
+              args:
+                replenishRate: 10
+                burstCapacity: 10
+            - name: CircuitBreaker
+              args:
+                name: product-service
+
+        - id: order-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - name: RateLimit
+              args:
+                replenishRate: 15
+                burstCapacity: 15
+            - name: CircuitBreaker
+              args:
+                name: order-service
+
+        - id: inventory-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/inventory/**,/api/category/**,/api/promotion/**
+          filters:
+            - name: RateLimit
+              args:
+                replenishRate: 12
+                burstCapacity: 12
+            - name: CircuitBreaker
+              args:
+                name: inventory-service
+
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+
 logging:
   pattern:
     level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}] %logger{36}"
@@ -78,10 +96,7 @@ logging:
     io.micrometer: DEBUG
     io.opentelemetry: DEBUG
 
-server:
-  port: 8080
-  forward-headers-strategy: framework
-  connection-timeout=10s:
+
 resilience4j:
   circuitbreaker:
     configs:
@@ -113,6 +128,7 @@ resilience4j:
       inventory-service:
         baseConfig: default
         waitDurationInOpenState: 20000
+
 
   ratelimiter:
     configs:

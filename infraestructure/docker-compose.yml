@@ -70,7 +70,9 @@ services:
 
   keycloak:
     image: 'quay.io/keycloak/keycloak'
-    command: start-dev
+    command:
+      - start-dev
+      - --import-realm
     environment:
       KC_DB: mysql
       KC_DB_URL_HOST: keycloak-mysql

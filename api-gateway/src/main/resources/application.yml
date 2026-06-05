@@ -3,6 +3,11 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
   otlp:
     metrics:
       export:
@@ -12,15 +17,16 @@ management:
       export:
         otlp:
           endpoint: http://localhost:4318/v1/traces
-  endpoint:
-    health:
-      show-details: always
   tracing:
     sampling:
       probability: '1.0'
+
 spring:
   cloud:
     gateway:
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 10000
       server:
         webflux:
           routes:
@@ -28,16 +34,34 @@ spring:
               uri: http://localhost:8082
               predicates:
                 - Path=/api/product/**
+              filters:
+                - RateLimit=10,60000
+                - CircuitBreaker=product-service
+              metadata:
+                connect-timeout: 5000
+                response-timeout: 10000
 
             - id: order-service
               uri: http://localhost:8081
               predicates:
                 - Path=/api/order/**
+              filters:
+                - RateLimit=15,60000
+                - CircuitBreaker=order-service
+              metadata:
+                connect-timeout: 5000
+                response-timeout: 10000
 
             - id: inventory-service
               uri: http://localhost:8083
               predicates:
                 - Path=/api/inventory/**,/api/category/**,/api/promotion/**
+              filters:
+                - RateLimit=12,60000
+                - CircuitBreaker=inventory-service
+              metadata:
+                connect-timeout: 5000
+                response-timeout: 10000
 
   application:
     name: api-gateway
@@ -48,26 +72,56 @@ spring:
           issuer-uri: http://localhost:8181/realms/techmarket-realm
 logging:
   pattern:
-    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
+    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}] %logger{36}"
   level:
-    org:
-      springframework:
-        boot:
-          actuator:
-            autoconfigure:
-              opentelemetry: DEBUG
-          docker:
-            compose: DEBUG
-        cloud:
-          gateway:
-            route:
-              RouteDefinitionLocator: INFO
-            nodeValue: TRACE
     root: INFO
     io.micrometer: DEBUG
     io.opentelemetry: DEBUG
-    org.springframework.boot.actuate: DEBUG
+
 server:
   port: 8080
   forward-headers-strategy: framework
   connection-timeout=10s:
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50.0
+        slowCallRateThreshold: 50.0
+        slowCallDurationThreshold: 5000
+        waitDurationInOpenState: 30000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        recordExceptions:
+          - java.net.ConnectException
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+
+    instances:
+      product-service:
+        baseConfig: default
+        waitDurationInOpenState: 20000
+
+      order-service:
+        baseConfig: default
+        failureRateThreshold: 60.0
+        waitDurationInOpenState: 25000
+
+      inventory-service:
+        baseConfig: default
+        waitDurationInOpenState: 20000
+
+  ratelimiter:
+    configs:
+      default:
+        registerHealthIndicator: false
+        limitForPeriod: 100
+        limitRefreshPeriod: 1m
+        timeoutDuration: 5s
+
+    instances:
+      default:
+        baseConfig: default

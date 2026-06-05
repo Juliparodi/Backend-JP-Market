@@ -2,4 +2,4 @@ management:
   otlp:
     metrics:
       export:
-        enabled: false
+        baseConfig: default

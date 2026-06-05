@@ -43,9 +43,28 @@ management:
       export:
         otlp:
           endpoint: http://grafana-lgtm:4318/v1/traces
-  endpoint:
-    health:
-      show-details: always
   tracing:
     sampling:
       probability: '1.0'
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50.0
+        slowCallRateThreshold: 50.0
+        slowCallDurationThreshold: 5000
+        waitDurationInOpenState: 30000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+    instances:
+      product-service:
+        baseConfig: default
+      order-service:
+        baseConfig: default
+      inventory-service:
+        baseConfig: default

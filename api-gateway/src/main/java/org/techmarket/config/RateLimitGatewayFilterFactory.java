@@ -42,10 +42,16 @@ public class RateLimitGatewayFilterFactory
         int burstCapacity  = config.burstCapacity  > 0 ? config.burstCapacity  : Config.DEFAULT_BURST_CAPACITY;
 
         return (exchange, chain) -> {
-            InetSocketAddress remoteAddress = exchange.getRequest().getRemoteAddress();
-            String clientIP = (remoteAddress != null && remoteAddress.getAddress() != null)
-                    ? remoteAddress.getAddress().getHostAddress()
-                    : "unknown";
+            String clientIP = exchange.getRequest()
+                    .getHeaders()
+                    .getFirst("X-Forwarded-For");
+
+            if (clientIP == null || clientIP.isEmpty()) {
+                InetSocketAddress remoteAddress = exchange.getRequest().getRemoteAddress();
+                clientIP = (remoteAddress != null && remoteAddress.getAddress() != null)
+                        ? remoteAddress.getAddress().getHostAddress()
+                        : "unknown";
+            }
 
             TokenBucket bucket = buckets.computeIfAbsent(
                     clientIP, k -> new TokenBucket(replenishRate, burstCapacity));

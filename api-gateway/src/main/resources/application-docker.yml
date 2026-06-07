@@ -8,16 +8,41 @@ spring:
               uri: http://product-service:8082
               predicates:
                 - Path=/api/product/**
+              filters:
+                - name: RateLimit
+                  args:
+                    replenishRate: 4
+                    burstCapacity: 4
+                - name: CircuitBreaker
+                  args:
+                    name: product-service
 
             - id: order-service
               uri: http://order-service:8081
               predicates:
                 - Path=/api/order/**
+              filters:
+                - name: RateLimit
+                  args:
+                    replenishRate: 4
+                    burstCapacity: 4
+                - name: CircuitBreaker
+                  args:
+                    name: order-service
 
             - id: inventory-service
               uri: http://inventory-service:8083
               predicates:
                 - Path=/api/inventory/**,/api/category/**,/api/promotion/**
+              filters:
+                - name: RateLimit
+                  args:
+                    replenishRate: 4
+                    burstCapacity: 4
+                - name: CircuitBreaker
+                  args:
+                    name: inventory-service
+
   application:
     name: api-gateway
   security:

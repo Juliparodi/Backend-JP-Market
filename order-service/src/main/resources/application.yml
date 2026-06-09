@@ -41,6 +41,7 @@ spring:
       properties:
         schema.registry.url: http://localhost:8081
         enable.idempotence: true
+        context.name.strategy: io.confluent.kafka.serializers.context.NullContextNameStrategy
     template:
       default-topic: orderTopic
   flyway:

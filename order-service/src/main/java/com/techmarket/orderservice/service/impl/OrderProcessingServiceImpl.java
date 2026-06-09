@@ -2,15 +2,14 @@ package com.techmarket.orderservice.service.impl;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
-import com.techmarket.schema.OrderPlacedEvent;
-import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
+import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.mapper.OrderEventMapper;
+import com.techmarket.schema.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,12 +66,15 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private void sendEvent(OrderPlacedEvent event) throws ExecutionException, InterruptedException {
 
-        SendResult<String, OrderPlacedEvent> sendResult = kafkaTemplate.send(
-                "orderTopic", event.getOrderNumber(), event).get();
-
-        String topic = sendResult.getRecordMetadata().topic();
-        int partition = sendResult.getRecordMetadata().partition();
-
-        log.info("Produced to topic: {}, partition: {} Avro data: {}", topic, partition, event);
+        kafkaTemplate.send("orderTopic", event.getOrderNumber(), event)
+                .whenComplete((result, ex) -> {
+                    if (ex != null) {
+                        log.error("Kafka send failed", ex);
+                    } else {
+                        log.info("Produced to {}-{}",
+                                result.getRecordMetadata().topic(),
+                                result.getRecordMetadata().partition());
+                    }
+                });
     }
 }

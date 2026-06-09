@@ -12,7 +12,7 @@
     <artifactId>schema-registry</artifactId>
 
     <properties>
-        <avro.version>1.11.3</avro.version>
+        <avro.version>1.12.1</avro.version>
     </properties>
 
     <dependencies>

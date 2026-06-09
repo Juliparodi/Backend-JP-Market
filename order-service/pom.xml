@@ -93,7 +93,7 @@
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
-            <version>7.6.0</version>
+            <version>8.2.1</version>
         </dependency>
 
         <!-- Mail -->

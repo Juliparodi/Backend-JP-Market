@@ -5,7 +5,6 @@ spring:
       bootstrap-servers: kafka:9092
       properties:
         schema.registry.url: http://schema-registry:8086
-        context.name.strategy: io.confluent.kafka.serializers.context.NullContextNameStrategy
   datasource:
     url: jdbc:mysql://mysql-order:3306/order-service
     username: juliparodi

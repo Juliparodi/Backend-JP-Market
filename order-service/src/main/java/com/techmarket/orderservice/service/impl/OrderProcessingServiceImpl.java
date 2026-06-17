@@ -2,11 +2,11 @@ package com.techmarket.orderservice.service.impl;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
+import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.IOrderProcessingService;
 import com.techmarket.orderservice.service.IOrderService;
 import com.techmarket.orderservice.service.InventoryService;
 import com.techmarket.orderservice.service.mapper.OrderEventMapper;
-import com.techmarket.schema.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -66,7 +66,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private void sendEvent(OrderPlacedEvent event) throws ExecutionException, InterruptedException {
 
-        kafkaTemplate.send("orderTopic", event.getOrderNumber(), event)
+        kafkaTemplate.send("orderTopic", event.orderNumber(), event)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("Kafka send failed", ex);

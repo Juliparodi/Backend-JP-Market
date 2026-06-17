@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import com.techmarket.schema.OrderPlacedEvent;
+import org.techmarket.event.OrderPlacedEvent;
 import org.techmarket.service.IEmailService;
 import org.techmarket.service.INotificationService;
 
@@ -17,7 +17,7 @@ public class NotificationServiceImpl implements INotificationService {
 
     @KafkaListener(topics = "orderTopic")
     public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
-        String orderNumber = orderPlacedEvent.getOrderNumber();
+        String orderNumber = orderPlacedEvent.orderNumber();
         String subject = "Order #" + orderNumber + " Confirmation";
         String congrats = "Congrats! Order nro: " + orderNumber + " succesfully created";
         log.info("ACK: {}", orderNumber);

@@ -9,9 +9,6 @@ spring:
     locations: classpath:db
   kafka:
     bootstrap-servers: kafka:9092
-    consumer:
-      properties:
-        schema.registry.url: http://schema-registry:8086
 management:
   endpoints:
     web:

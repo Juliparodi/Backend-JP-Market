@@ -21,7 +21,6 @@
         <module>inventory-service</module>
         <module>api-gateway</module>
         <module>notification-service</module>
-        <module>schema-registry</module>
     </modules>
 
     <properties>
@@ -71,21 +70,6 @@
                 <version>3.0.3</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.confluent</groupId>
-                <artifactId>kafka-avro-serializer</artifactId>
-                <version>8.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>io.confluent</groupId>
-                <artifactId>kafka-schema-registry-client</artifactId>
-                <version>8.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>io.confluent</groupId>
-                <artifactId>kafka-schema-serializer</artifactId>
-                <version>8.2.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

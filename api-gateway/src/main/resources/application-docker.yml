@@ -43,6 +43,37 @@ spring:
                   args:
                     name: inventory-service
 
+            - id: product-service-openapi
+              uri: http://product-service:8082
+              predicates:
+                - Path=/aggregate/product-service/v3/api-docs
+              filters:
+                - RewritePath=/aggregate/product-service/v3/api-docs, /v3/api-docs
+
+            - id: order-service-openapi
+              uri: http://order-service:8081
+              predicates:
+                - Path=/aggregate/order-service/v3/api-docs
+              filters:
+                - RewritePath=/aggregate/order-service/v3/api-docs, /v3/api-docs
+
+            - id: inventory-service-openapi
+              uri: http://inventory-service:8083
+              predicates:
+                - Path=/aggregate/inventory-service/v3/api-docs
+              filters:
+                - RewritePath=/aggregate/inventory-service/v3/api-docs, /v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Product Service API
+        url: /aggregate/product-service/v3/api-docs
+      - name: Order Service API
+        url: /aggregate/order-service/v3/api-docs
+      - name: Inventory Service API
+        url: /aggregate/inventory-service/v3/api-docs
+
   application:
     name: api-gateway
   security:

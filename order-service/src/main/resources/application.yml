@@ -36,7 +36,7 @@ spring:
   kafka:
     producer:
       client-id: order-service-producer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
         schema.registry.url: http://localhost:8081

@@ -2,9 +2,8 @@ package com.techmarket.orderservice.service;
 
 import com.techmarket.orderservice.domain.dto.OrderLineItemsDTO;
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
-import com.techmarket.schema.OrderPlacedEvent;
+import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.impl.OrderProcessingServiceImpl;
-import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -23,8 +22,8 @@ import java.util.List;
 
 import static com.techmarket.orderservice.mocks.OrderMocks.getOrderMock;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")

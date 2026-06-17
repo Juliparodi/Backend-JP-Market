@@ -3,8 +3,6 @@ spring:
     bootstrap-servers: kafka:9092
     producer:
       bootstrap-servers: kafka:9092
-      properties:
-        schema.registry.url: http://schema-registry:8086
   datasource:
     url: jdbc:mysql://mysql-order:3306/order-service
     username: juliparodi

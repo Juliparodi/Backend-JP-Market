@@ -30,21 +30,6 @@ services:
     networks:
       - techmarket-network
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:latest
-    container_name: schema-registry
-    hostname: schema-registry
-    depends_on:
-      - kafka
-    ports:
-      - "8086:8086"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:9092'
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8086
-    networks:
-      - techmarket-network
-
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui

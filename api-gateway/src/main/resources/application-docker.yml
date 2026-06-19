@@ -1,4 +1,12 @@
 spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/techmarket-realm
+          jwk-set-uri: http://keycloak:8080/realms/techmarket-realm/protocol/openid-connect/certs
   cloud:
     gateway:
       server:
@@ -74,14 +82,6 @@ springdoc:
       - name: Inventory Service API
         url: /aggregate/inventory-service/v3/api-docs
 
-  application:
-    name: api-gateway
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8181/realms/techmarket-realm
-          jwk-set-uri: http://keycloak:8080/realms/techmarket-realm/protocol/openid-connect/certs
 server:
   port: 8084
 

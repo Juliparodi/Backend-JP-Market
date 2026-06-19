@@ -5,8 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8181/realms/techmarket-realm
-          jwk-set-uri: http://keycloak:8080/realms/techmarket-realm/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/realms/techmarket-realm
   cloud:
     gateway:
       server:

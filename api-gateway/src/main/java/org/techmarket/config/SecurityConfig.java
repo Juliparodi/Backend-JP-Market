@@ -22,7 +22,7 @@ public class SecurityConfig {
         serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/actuator/**", "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**")
+                        .pathMatchers("/actuator/**", "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**", "/aggregate/**")
                         .permitAll()
                         .anyExchange()
                         .authenticated())

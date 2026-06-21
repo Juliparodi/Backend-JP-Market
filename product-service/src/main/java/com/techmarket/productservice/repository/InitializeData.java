@@ -6,6 +6,7 @@ import com.techmarket.productservice.model.entities.Promotion;
 import com.techmarket.productservice.model.entities.Variation;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,10 +26,8 @@ public class InitializeData {
     categoryRepository.deleteAll();
     promotionRepository.deleteAll();
 
-    // Variations (shared)
     List<Variation> variationList = createVariations();
 
-    // Promotion
     Promotion promotion = Promotion.builder()
             .promotionCode("PHO300")
             .name("Phone discounts")
@@ -40,20 +39,18 @@ public class InitializeData {
 
     promotion = promotionRepository.save(promotion);
 
-    // Categories
     Category phoneCategory = categoryRepository.save(
-            Category.builder().name("phone").promotion(promotion).build()
+            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1a")).name("phone").promotion(promotion).build()
     );
 
     Category notebookCategory = categoryRepository.save(
-            Category.builder().name("notebook").build()
+            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1b")).name("notebook").build()
     );
 
     Category headphonesCategory = categoryRepository.save(
-            Category.builder().name("headphones").build()
+            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1c")).name("headphones").build()
     );
 
-    // Products (from your JSON)
     List<Product> products = List.of(
 
             // PHONES
@@ -85,7 +82,6 @@ public class InitializeData {
     productRepository.saveAll(products);
   }
 
-  // helper builder (cleaner than repeating code)
   private Product p(String name,
                     String detail,
                     Category category,

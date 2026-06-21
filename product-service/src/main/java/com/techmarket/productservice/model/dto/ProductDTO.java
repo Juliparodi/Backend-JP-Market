@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +17,9 @@ import java.util.List;
 @Builder
 @Data
 public class ProductDTO {
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
     private String name;
     private String nameWithDetail;
     private String category;

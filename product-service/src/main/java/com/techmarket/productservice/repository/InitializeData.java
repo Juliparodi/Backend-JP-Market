@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class InitializeData {
@@ -21,233 +19,96 @@ public class InitializeData {
   private final PromotionRepository promotionRepository;
 
   @PostConstruct
-  public void loadDate() {
-    List<Variation> variationList = createVariations();
+  public void loadData() {
+
     productRepository.deleteAll();
     categoryRepository.deleteAll();
-    List<Product> productList = new ArrayList<>();
+    promotionRepository.deleteAll();
 
+    // Variations (shared)
+    List<Variation> variationList = createVariations();
+
+    // Promotion
     Promotion promotion = Promotion.builder()
-        .promotionCode("PHO300")
-        .name("Phone discounts")
-        .description("Phone discounts")
-        .discountRate(BigDecimal.valueOf(0.15))
-        .startDate(LocalDate.now())
-        .endDate(LocalDate.now().plusMonths(1))
-        .build();
+            .promotionCode("PHO300")
+            .name("Phone discounts")
+            .description("Phone discounts")
+            .discountRate(BigDecimal.valueOf(0.15))
+            .startDate(LocalDate.now())
+            .endDate(LocalDate.now().plusMonths(1))
+            .build();
 
-    categoryRepository.saveAll(List.of(Category.builder()
-            .name("phone")
-            .promotion(promotion)
-            .build(),
-        Category.builder()
-            .name("notebook")
-            .build(),
-        Category.builder()
-            .name("headphones")
-            .build()
-    ));
+    promotion = promotionRepository.save(promotion);
 
-    Optional<Category> phoneCategory = categoryRepository.findByName("phone");
-    Optional<Category> notebookCategory = categoryRepository.findByName("notebook");
-    Optional<Category> headphonesCategory = categoryRepository.findByName("headphones");
+    // Categories
+    Category phoneCategory = categoryRepository.save(
+            Category.builder().name("phone").promotion(promotion).build()
+    );
 
+    Category notebookCategory = categoryRepository.save(
+            Category.builder().name("notebook").build()
+    );
 
-    productList.add(Product.builder()
-        .name("Iphone 13")
-        .nameWithDetail("Apple iPhone 13 (245 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("iphone13")
-        .price(BigDecimal.valueOf(999.99))
-        .variations(variationList)
-        .build());
+    Category headphonesCategory = categoryRepository.save(
+            Category.builder().name("headphones").build()
+    );
 
-    productList.add(Product.builder()
-        .name("Iphone 12")
-        .nameWithDetail("Apple iPhone 12 (200 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("iphone12")
-        .price(BigDecimal.valueOf(799.99))
-        .variations(variationList)
-        .build());
+    // Products (from your JSON)
+    List<Product> products = List.of(
 
-    productList.add(Product.builder()
-        .name("Iphone 11")
-        .nameWithDetail("Apple iPhone 11 (200 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("iphone11")
-        .price(BigDecimal.valueOf(699.99))
-        .variations(variationList)
-        .build());
+            // PHONES
+            p("Iphone 13", "Apple iPhone 13 (245 GB) - Negro", phoneCategory, 999.99, "iphone13", variationList),
+            p("Iphone 12", "Apple iPhone 12 (200 GB) - Negro", phoneCategory, 799.99, "iphone12", variationList),
+            p("Iphone 11", "Apple iPhone 11 (128 GB) - Blanco", phoneCategory, 687.99, "iphone11", variationList),
 
-    productList.add(Product.builder()
-        .name("Samsung A54")
-        .nameWithDetail("Samsung A54 (158 GB)")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("samsung2")
-        .price(BigDecimal.valueOf(356.99))
-        .variations(variationList)
-        .build());
+            p("Samsung S22 Ultra", "Samsung S22 Ultra (245 GB) - Negro", phoneCategory, 855.99, "samsung1", variationList),
+            p("Samsung A54", "Samsung A54 (158 GB)", phoneCategory, 356.99, "samsung2", variationList),
+            p("Samsung A34", "Samsung A34 (128 GB) - Negro", phoneCategory, 299.99, "samsung3", variationList),
 
-    productList.add(Product.builder()
-        .name("Samsung S22")
-        .nameWithDetail("Samsung S22 (158 GB)")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("samsung1")
-        .price(BigDecimal.valueOf(356.99))
-        .variations(variationList)
-        .build());
+            p("Motorola 1", "Motorola 1 (128 GB) - Negro", phoneCategory, 150.99, "motorola1", variationList),
+            p("Motorola 2", "Motorola 2 (128 GB) - Negro", phoneCategory, 199.99, "motorola2", variationList),
+            p("Motorola 3", "Motorola 3 (128 GB) - Negro", phoneCategory, 159.99, "iphone14", variationList),
 
-    productList.add(Product.builder()
-        .name("Samsung A54")
-        .nameWithDetail("Samsung A54 (158 GB)")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("samsung2")
-        .price(BigDecimal.valueOf(356.99))
-        .variations(variationList)
-        .build());
+            // NOTEBOOKS
+            p("Notebook Dell", "Notebook Dell (500 GB) 8 cores - Negro", notebookCategory, 1099.99, "notebook1", variationList),
+            p("Notebook HP", "Notebook HB (500 GB) 8 cores - Negro", notebookCategory, 1199.99, "notebook2", variationList),
+            p("Notebook 3", "Notebook 3 (500 GB) 8 cores - Negro", notebookCategory, 999.99, "notebook3", variationList),
+            p("Notebook 4", "Notebook 4 (500 GB) 8 cores - Negro", notebookCategory, 899.99, "notebook4", variationList),
 
-    productList.add(Product.builder()
-        .name("Samsung A34")
-        .nameWithDetail("Samsung A34 (128 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("samsung3")
-        .price(BigDecimal.valueOf(299.99))
-        .variations(variationList)
-        .build());
+            // HEADPHONES
+            p("Headphones 1", "Headphones 1 - Negro", headphonesCategory, 143.99, "auri1", variationList),
+            p("Headphones 2", "Headphones 2 - Negro", headphonesCategory, 245.99, "auri2", variationList),
+            p("Headphones 3", "Headphones 3 - Negro", headphonesCategory, 367.99, "auri3", variationList),
+            p("Headphones 4", "Headphones 4 - Negro", headphonesCategory, 134.99, "auri4", variationList)
+    );
 
-    productList.add(Product.builder()
-        .name("Motorola 1")
-        .nameWithDetail("Motorola 1 (128 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("motorola1")
-        .price(BigDecimal.valueOf(150.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Motorola 2")
-        .nameWithDetail("Motorola 2 (128 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("motorola2")
-        .price(BigDecimal.valueOf(199.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Motorola 3")
-        .nameWithDetail("Motorola 3 (128 GB) - Negro")
-        .category(phoneCategory.get().getId())
-        .stock(25)
-        .img("iphone14")
-        .price(BigDecimal.valueOf(159.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Notebook Dell")
-        .nameWithDetail("Notebook Dell (500 GB) 8 cores - Negro")
-        .category(notebookCategory.get().getId())
-        .stock(25)
-        .img("notebook1")
-        .price(BigDecimal.valueOf(1099.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Notebook HP")
-        .nameWithDetail("Notebook HB (500 GB) 8 cores - Negro")
-        .category(notebookCategory.get().getId())
-        .stock(25)
-        .img("notebook2")
-        .price(BigDecimal.valueOf(1199.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Notebook 3")
-        .nameWithDetail("Notebook 3 (500 GB) 8 cores - Negro")
-        .category(notebookCategory.get().getId())
-        .stock(25)
-        .img("notebook3")
-        .price(BigDecimal.valueOf(999.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Notebook 4")
-        .nameWithDetail("Notebook 4 (500 GB) 8 cores - Negro")
-        .category(notebookCategory.get().getId())
-        .stock(25)
-        .img("notebook4")
-        .price(BigDecimal.valueOf(899.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Headphones 1")
-        .nameWithDetail("Headphones 1 - Negro")
-        .category(headphonesCategory.get().getId())
-        .stock(25)
-        .img("auri1")
-        .price(BigDecimal.valueOf(143.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Headphones 2")
-        .nameWithDetail("Headphones 2 - Negro")
-        .category(headphonesCategory.get().getId())
-        .stock(25)
-        .img("auri2")
-        .price(BigDecimal.valueOf(245.99))
-        .variations(variationList)
-        .build());
-
-    productList.add(Product.builder()
-        .name("Headphones 3")
-        .nameWithDetail("Headphones 3 - Negro")
-        .category(headphonesCategory.get().getId())
-        .stock(25)
-        .img("auri3")
-        .price(BigDecimal.valueOf(367.99))
-        .variations(variationList)
-        .build());
-    productRepository.saveAll(productList);
+    productRepository.saveAll(products);
   }
 
-  private List<Category> createCategories() {
-    return List.of(Category.builder()
-            .name("phone")
-            .build(),
-        Category.builder()
-            .name("notebook")
-            .build(),
-        Category.builder()
-            .name("headphones")
-            .build()
-    );
+  // helper builder (cleaner than repeating code)
+  private Product p(String name,
+                    String detail,
+                    Category category,
+                    double price,
+                    String img,
+                    List<Variation> variations) {
+
+    return Product.builder()
+            .name(name)
+            .nameWithDetail(detail)
+            .category(category.getId())
+            .stock(25)
+            .price(BigDecimal.valueOf(price))
+            .img(img)
+            .variations(variations)
+            .build();
   }
 
   private List<Variation> createVariations() {
-    return List.of(Variation.builder()
-            .color("black")
-            .build(),
-        Variation.builder()
-            .color("red")
-            .build(),
-        Variation.builder()
-            .color("white")
-            .build()
+    return List.of(
+            Variation.builder().color("black").build(),
+            Variation.builder().color("red").build(),
+            Variation.builder().color("white").build()
     );
   }
 }

@@ -3,6 +3,7 @@ package com.techmarket.productservice.controller;
 import com.techmarket.productservice.model.dto.ProductDTO;
 import com.techmarket.productservice.model.entities.Variation;
 import com.techmarket.productservice.service.IProductService;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -55,6 +56,7 @@ public class ProductControllerTest {
   void getAllProducts_shouldReturnProductList() throws Exception {
     List<ProductDTO> products = List.of(
         new ProductDTO(
+                new ObjectId("64b7f1e2f1c2a3b4d5e6f7g8"),
             "T-Shirt",
             "T-Shirt - Cotton - Red",
             "CLOTHING",

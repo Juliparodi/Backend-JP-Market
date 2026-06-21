@@ -43,7 +43,7 @@ public class InitializeDataTest {
 
   @Test
   void shouldLoadInitialData() {
-    initializeData.loadDate();
+    initializeData.loadData();
 
     verify(productRepository).deleteAll();
     verify(categoryRepository).deleteAll();

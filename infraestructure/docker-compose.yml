@@ -193,6 +193,7 @@ services:
     image: juliparodi/techmarket:product-service-latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
     depends_on:
       - mongo
       - api-gateway

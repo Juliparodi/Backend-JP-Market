@@ -9,11 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InitializeDataTest {
@@ -32,13 +30,10 @@ public class InitializeDataTest {
 
   @BeforeEach
   void setup() {
-    Category phone = Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1f")).name("phone").build();
-    Category notebook = Category.builder().id(new ObjectId("abcdefabcdefabcdefabcdef")).name("notebook").build();
     Category headphones = Category.builder().id(new ObjectId("0123456789abcdefabcdef12")).name("headphones").build();
 
-    when(categoryRepository.findByName("phone")).thenReturn(Optional.of(phone));
-    when(categoryRepository.findByName("notebook")).thenReturn(Optional.of(notebook));
-    when(categoryRepository.findByName("headphones")).thenReturn(Optional.of(headphones));
+    when(categoryRepository.save(any())).thenReturn(headphones);
+
   }
 
   @Test
@@ -48,12 +43,9 @@ public class InitializeDataTest {
     verify(productRepository).deleteAll();
     verify(categoryRepository).deleteAll();
 
-    verify(categoryRepository).saveAll(anyList());
+    verify(categoryRepository, times(3)).save(any(Category.class));
     verify(productRepository).saveAll(anyList());
 
-    verify(categoryRepository).findByName("phone");
-    verify(categoryRepository).findByName("notebook");
-    verify(categoryRepository).findByName("headphones");
   }
 
 

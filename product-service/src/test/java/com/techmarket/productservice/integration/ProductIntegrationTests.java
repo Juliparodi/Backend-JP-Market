@@ -19,7 +19,7 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Testcontainers
@@ -63,8 +63,8 @@ public class ProductIntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonConverter.loadJsonFromFile("new-product.json"))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN))
-                .andExpect(status().is5xxServerError());
-        //Assertions.assertEquals(1, productRepository.findAll().size());
+                .andExpect(status().isCreated());
+        assertEquals(1, productRepository.findAll().size());
     }
 
 }

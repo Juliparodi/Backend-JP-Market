@@ -4,8 +4,7 @@ spring:
     port: 27017
     database: product-service
     username: julianparodi19
-    password: ${MONGO_PASSWORD}
-    authentication-database: admin
+    password: ${MONGO_JULIP_PASSWORD}
 
 management:
   endpoints:

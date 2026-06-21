@@ -142,7 +142,7 @@ services:
 
   mongo:
     container_name: mongo
-    image: mongo:4.4.14-rc0-focal
+    image: mongo:7.0
     restart: always
     ports:
       - "27017:27017"
@@ -151,6 +151,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: juliadmin
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASSWORD}
+      MONGO_JULIP_PASSWORD: ${MONGO_JULIP_PASSWORD}
     volumes:
       - ./mongo-data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d

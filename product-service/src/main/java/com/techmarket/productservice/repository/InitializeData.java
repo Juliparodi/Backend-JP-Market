@@ -7,12 +7,14 @@ import com.techmarket.productservice.model.entities.Variation;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Component
 public class InitializeData {
 
   private final ProductRepository productRepository;
@@ -40,15 +42,15 @@ public class InitializeData {
     promotion = promotionRepository.save(promotion);
 
     Category phoneCategory = categoryRepository.save(
-            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1a")).name("phone").promotion(promotion).build()
+            Category.builder().id((new ObjectId())).name("phone").promotion(promotion).build()
     );
 
     Category notebookCategory = categoryRepository.save(
-            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1b")).name("notebook").build()
+            Category.builder().id((new ObjectId())).name("notebook").build()
     );
 
     Category headphonesCategory = categoryRepository.save(
-            Category.builder().id(new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1c")).name("headphones").build()
+            Category.builder().id((new ObjectId())).name("headphones").build()
     );
 
     List<Product> products = List.of(
@@ -90,6 +92,7 @@ public class InitializeData {
                     List<Variation> variations) {
 
     return Product.builder()
+            .id((new ObjectId()))
             .name(name)
             .nameWithDetail(detail)
             .category(categoryId)

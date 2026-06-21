@@ -1,10 +1,7 @@
 spring:
   mongodb:
-    host: mongo
-    port: 27017
-    database: product-service
-    username: julianparodi19
-    password: ${MONGO_JULIP_PASSWORD}
+    uri: mongodb://julianparodi19:${MONGO_JULIP_PASSWORD}@mongo:27017/product-service
+
 
 management:
   endpoints:

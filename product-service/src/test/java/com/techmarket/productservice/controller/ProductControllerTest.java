@@ -56,7 +56,7 @@ public class ProductControllerTest {
   void getAllProducts_shouldReturnProductList() throws Exception {
     List<ProductDTO> products = List.of(
         new ProductDTO(
-                new ObjectId("64b7f1e2f1c2a3b4d5e6f7g8"),
+                new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1f"),
             "T-Shirt",
             "T-Shirt - Cotton - Red",
             "CLOTHING",

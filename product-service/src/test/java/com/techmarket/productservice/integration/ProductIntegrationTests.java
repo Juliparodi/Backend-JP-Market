@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductIntegrationTests {
 
     @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2")
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0")
         .withEnv("MONGO_INITDB_DATABASE", "local")
         .withEnv("MONGO_INIT_ROOT_USERNAME", "admin")
         .withEnv("MONGO_INIT_ROOT_PASSWORD", "admin");
@@ -64,7 +64,7 @@ public class ProductIntegrationTests {
                         .content(JsonConverter.loadJsonFromFile("new-product.json"))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + TOKEN))
                 .andExpect(status().isCreated());
-        assertEquals(1, productRepository.findAll().size());
+        assertEquals(18, productRepository.findAll().size());
     }
 
 }

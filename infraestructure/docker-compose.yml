@@ -223,8 +223,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_PASSWORD=${POSTGRE_PASSWORD}
-    ports:
-      - "8083:8083"
     depends_on:
       - postgres-inventory
       - api-gateway

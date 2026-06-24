@@ -1,7 +1,8 @@
 package com.techmarket.productservice.controller;
 
 import com.techmarket.productservice.model.dto.ProductDTO;
-import com.techmarket.productservice.model.entities.Variation;
+import com.techmarket.productservice.model.dto.ProductWithCategoryDTO;
+import com.techmarket.productservice.model.entities.Category;
 import com.techmarket.productservice.service.IProductService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
@@ -19,10 +20,10 @@ import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
@@ -54,25 +55,26 @@ public class ProductControllerTest {
   @Test
   @DisplayName("GET /api/product/all - should return list of products")
   void getAllProducts_shouldReturnProductList() throws Exception {
-    List<ProductDTO> products = List.of(
-        new ProductDTO(
-                new ObjectId("5f2d7c3b1e2f4a6b8c9d0e1f"),
-            "T-Shirt",
-            "T-Shirt - Cotton - Red",
-            "CLOTHING",
-            50,
-            "https://example.com/img.jpg",
-            new BigDecimal("19.99"),
-            List.of(Variation.builder().build()),
-            "Men's Clothing"
-    ));
+
+
+    Category category = Category.builder().id(new ObjectId()).name("Smartphones").build();
+    List<ProductWithCategoryDTO> products = List.of(
+            new ProductWithCategoryDTO(
+                    new ObjectId().toHexString(),
+                    "iPhone 16",
+                    "iPhone 16 Pro Max 256GB",
+                    category,
+                    10,
+                    "iphone.jpg",
+                    new BigDecimal("1299.99")
+            ));
 
     when(productService.getAllProducts()).thenReturn(products);
 
     mockMvc.perform(get("/api/product/all"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(products.size()))
-        .andExpect(jsonPath("$[0].name").value("T-Shirt"));
+        .andExpect(jsonPath("$[0].name").value("iPhone 16"));
   }
 
 }

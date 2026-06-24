@@ -1,6 +1,7 @@
 package com.techmarket.productservice.controller;
 
 import com.techmarket.productservice.model.dto.ProductDTO;
+import com.techmarket.productservice.model.dto.ProductWithCategoryDTO;
 import com.techmarket.productservice.service.IProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,14 +30,14 @@ public class ProductController {
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all products", description = "Retrieves a list of all products")
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductWithCategoryDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get product by ID", description = "Retrieves a product by its ID")
-    public ProductDTO getProductById(@PathVariable String id) {
+    public ProductWithCategoryDTO getProductById(@PathVariable String id) {
         return productService.getProductById(id);
     }
 

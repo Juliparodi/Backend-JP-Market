@@ -95,7 +95,7 @@ public class InitializeData {
             .id((new ObjectId()))
             .name(name)
             .nameWithDetail(detail)
-            .category(Category.builder().id(categoryId).name("notebook").build())
+            .category(categoryId)
             .stock(25)
             .price(BigDecimal.valueOf(price))
             .img(img)

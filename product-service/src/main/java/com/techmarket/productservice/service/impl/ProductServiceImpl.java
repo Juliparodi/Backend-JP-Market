@@ -3,6 +3,7 @@ package com.techmarket.productservice.service.impl;
 import com.techmarket.productservice.exceptions.CategoryNotFoundException;
 import com.techmarket.productservice.exceptions.ProductNotFoundException;
 import com.techmarket.productservice.model.dto.ProductDTO;
+import com.techmarket.productservice.model.dto.ProductWithCategoryDTO;
 import com.techmarket.productservice.model.entities.Category;
 import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.repository.CategoryRepository;
@@ -28,33 +29,44 @@ public class ProductServiceImpl implements IProductService {
 
 
     public void createProduct(ProductDTO productRequest) {
-        Optional<Category> categoryOptional = categoryRepository.findByName(productRequest.getCategory());
+        Category category =
+                categoryRepository
+                        .findByName(productRequest.getCategory())
+                        .orElseThrow(
+                                () -> new CategoryNotFoundException(
+                                        "Category not found"
+                                )
+                        );
 
-        Product product = Product.builder()
-                .name(productRequest.getName())
-                .nameWithDetail(productRequest.getNameWithDetail())
-                .price(productRequest.getPrice())
-                .stock(productRequest.getStock())
-                .price(productRequest.getPrice())
-                .category(categoryOptional.orElseThrow(RuntimeException::new))
-                .img(productRequest.getImg())
-                .build();
+        Product product =
+                Product.builder()
+                        .name(productRequest.getName())
+                        .nameWithDetail(productRequest.getNameWithDetail())
+                        .price(productRequest.getPrice())
+                        .stock(productRequest.getStock())
+                        .category(category.getId())
+                        .img(productRequest.getImg())
+                        .build();
 
-        log.info("product saved");
         productRepository.save(product);
     }
 
-    public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-
-        return productMapper.mapToProductResponse(products);
+    public List<ProductWithCategoryDTO> getAllProducts() {
+        return productRepository.findAllWithCategory();
     }
 
     @Override
-    public ProductDTO getProductById(String id) {
-        Product product = productRepository.findById(new ObjectId(id))
-                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
-        return productMapper.mapToProductResponse(List.of(product)).get(0);
+    public ProductWithCategoryDTO  getProductById(String id) {
+        ProductWithCategoryDTO product =
+                productRepository.findByIdWithCategory(id);
+
+        if (product == null) {
+            throw new ProductNotFoundException(
+                    "Product not found"
+            );
+        }
+
+        return product;
     }
 
     @Override
@@ -68,7 +80,7 @@ public class ProductServiceImpl implements IProductService {
         existingProduct.setNameWithDetail(productRequest.getNameWithDetail());
         existingProduct.setPrice(productRequest.getPrice());
         existingProduct.setStock(productRequest.getStock());
-        existingProduct.setCategory(categoryOptional.orElseThrow(() -> new CategoryNotFoundException("Category not found: " + productRequest.getCategory())));
+        existingProduct.setCategory(categoryOptional.orElseThrow(() -> new CategoryNotFoundException("Category not found: " + productRequest.getCategory())).getId());
         existingProduct.setImg(productRequest.getImg());
 
         productRepository.save(existingProduct);

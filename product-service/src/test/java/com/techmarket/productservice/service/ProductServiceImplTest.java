@@ -1,6 +1,7 @@
 package com.techmarket.productservice.service;
 
 import com.techmarket.productservice.model.dto.ProductDTO;
+import com.techmarket.productservice.model.dto.ProductWithCategoryDTO;
 import com.techmarket.productservice.model.entities.Category;
 import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.model.entities.Promotion;
@@ -74,7 +75,6 @@ public class ProductServiceImplTest {
     Product saved = productCaptor.getValue();
     assertEquals("Shirt", saved.getName());
     assertEquals("Cotton Shirt", saved.getNameWithDetail());
-    assertEquals("CLOTHING", saved.getCategory().getName());
     assertEquals(new BigDecimal("29.99"), saved.getPrice());
     assertEquals(20, saved.getStock());
     assertEquals("img-url.jpg", saved.getImg());
@@ -103,7 +103,7 @@ public class ProductServiceImplTest {
         .nameWithDetail("Running Shoes")
         .stock(10)
         .price(new BigDecimal("49.99"))
-        .category(Category.builder().id(categoryId).name("CLOTHING").build())
+        .category(categoryId)
         .img("shoes.jpg")
         .build();
 
@@ -111,14 +111,14 @@ public class ProductServiceImplTest {
     when(productMapper.mapToProductResponse(List.of(product))).thenReturn(List.of(productDto));
 
     // When
-    List<ProductDTO> result = productService.getAllProducts();
+    List<ProductWithCategoryDTO> result = productService.getAllProducts();
 
     // Then
     assertEquals(1, result.size());
-    ProductDTO dto = result.get(0);
+    ProductWithCategoryDTO dto = result.get(0);
     assertEquals("Shirt", dto.getName());
     assertEquals("Cotton Shirt", dto.getNameWithDetail());
-    assertEquals("CLOTHING", dto.getCategory());
+    assertEquals("CLOTHING", dto.getCategory().getName());
     assertEquals(20, dto.getStock());
     assertEquals(new BigDecimal("29.99"), dto.getPrice());
     assertEquals("img-url.jpg", dto.getImg());

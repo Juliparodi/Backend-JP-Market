@@ -100,6 +100,7 @@ public class InitializeData {
             .price(BigDecimal.valueOf(price))
             .img(img)
             .variations(variations)
+            .skuCode("SKU-" + name.toUpperCase().replace(" ", "-"))
             .build();
   }
 

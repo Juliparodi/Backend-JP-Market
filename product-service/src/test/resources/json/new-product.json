@@ -4,5 +4,6 @@
   "category": "phone",
   "stock": 25,
   "price": 799.99,
-  "img": "iphone12"
+  "img": "iphone12",
+  "skuCode": "SKU-Iphone12"
 }

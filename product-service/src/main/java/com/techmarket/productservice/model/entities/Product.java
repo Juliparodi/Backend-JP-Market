@@ -34,4 +34,5 @@ public class Product {
     @LastModifiedDate
     private LocalDate modifiedDate;
     private List<Variation> variations;
+    private String skuCode;
 }

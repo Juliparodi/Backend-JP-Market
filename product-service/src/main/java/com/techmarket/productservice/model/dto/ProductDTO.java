@@ -28,4 +28,5 @@ public class ProductDTO {
     private BigDecimal price;
     private List<Variation> variations;
     private String categoryName;
+    private String skuCode;
 }

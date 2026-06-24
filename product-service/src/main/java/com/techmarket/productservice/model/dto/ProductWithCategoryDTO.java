@@ -26,4 +26,6 @@ public class ProductWithCategoryDTO {
 
     private BigDecimal price;
 
+    private String skuCode;
+
 }

@@ -66,7 +66,8 @@ public class ProductControllerTest {
                     category,
                     10,
                     "iphone.jpg",
-                    new BigDecimal("1299.99")
+                    new BigDecimal("1299.99"),
+                    "SKU-Iphone16"
             ));
 
     when(productService.getAllProducts()).thenReturn(products);

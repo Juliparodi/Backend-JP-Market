@@ -110,7 +110,7 @@ public class ProductIntegrationTests {
 
         Category phoneCategory = categoryRepository.findByName("Phone").get();
 
-        productRepository.save(Product.builder().id(new ObjectId()).name("Phone").nameWithDetail("Phone detail").category(phoneCategory.getId()).variations(Collections.emptyList()).build());
+        productRepository.save(Product.builder().id(new ObjectId()).name("Phone").nameWithDetail("Phone detail").category(phoneCategory.getId()).variations(Collections.emptyList()).skuCode("SKU-Phone").build());
     }
 
 }

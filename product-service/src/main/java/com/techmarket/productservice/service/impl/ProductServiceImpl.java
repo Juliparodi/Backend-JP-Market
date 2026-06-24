@@ -36,7 +36,7 @@ public class ProductServiceImpl implements IProductService {
                 .price(productRequest.getPrice())
                 .stock(productRequest.getStock())
                 .price(productRequest.getPrice())
-                .category(categoryOptional.map(Category::getId).orElseThrow(RuntimeException::new))
+                .category(categoryOptional.orElseThrow(RuntimeException::new))
                 .img(productRequest.getImg())
                 .build();
 
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements IProductService {
         existingProduct.setNameWithDetail(productRequest.getNameWithDetail());
         existingProduct.setPrice(productRequest.getPrice());
         existingProduct.setStock(productRequest.getStock());
-        existingProduct.setCategory(categoryOptional.orElseThrow(() -> new CategoryNotFoundException("Category not found: " + productRequest.getCategory())).getId());
+        existingProduct.setCategory(categoryOptional.orElseThrow(() -> new CategoryNotFoundException("Category not found: " + productRequest.getCategory())));
         existingProduct.setImg(productRequest.getImg());
 
         productRepository.save(existingProduct);

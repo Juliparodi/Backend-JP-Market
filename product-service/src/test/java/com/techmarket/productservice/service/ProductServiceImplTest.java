@@ -74,7 +74,7 @@ public class ProductServiceImplTest {
     Product saved = productCaptor.getValue();
     assertEquals("Shirt", saved.getName());
     assertEquals("Cotton Shirt", saved.getNameWithDetail());
-    assertEquals(categoryId, saved.getCategory());
+    assertEquals("CLOTHING", saved.getCategory().getName());
     assertEquals(new BigDecimal("29.99"), saved.getPrice());
     assertEquals(20, saved.getStock());
     assertEquals("img-url.jpg", saved.getImg());
@@ -103,7 +103,7 @@ public class ProductServiceImplTest {
         .nameWithDetail("Running Shoes")
         .stock(10)
         .price(new BigDecimal("49.99"))
-        .category(categoryId)
+        .category(Category.builder().id(categoryId).name("CLOTHING").build())
         .img("shoes.jpg")
         .build();
 

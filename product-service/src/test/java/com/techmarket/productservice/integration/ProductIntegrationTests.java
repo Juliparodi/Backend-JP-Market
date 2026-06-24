@@ -89,7 +89,7 @@ public class ProductIntegrationTests {
         insertValuesDB();
         mockMvc.perform(MockMvcRequestBuilders.get("/api/product/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].category.name").value("Phone"));;
+                .andExpect(jsonPath("$[0].category.name").value("phone"));;
     }
 
     private void insertValuesDB() {

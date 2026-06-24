@@ -2,6 +2,7 @@ package com.techmarket.orderservice.integration;
 
 import com.techmarket.orderservice.domain.dto.OrderRequestDTO;
 import com.techmarket.orderservice.domain.entities.Order;
+import com.techmarket.orderservice.domain.entities.OrderLineItems;
 import com.techmarket.orderservice.domain.event.OrderPlacedEvent;
 import com.techmarket.orderservice.service.IOrderService;
 import com.techmarket.orderservice.service.InventoryService;
@@ -28,6 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +96,9 @@ public class OrderProcessingServiceKafkaIT {
 
         Order order = new Order();
         order.setOrderNumber("ORDER-123");
+        order.setOrderLineItemsList(List.of(
+                OrderLineItems.builder().orderLineItemsId(123L).skuCode("SKU1").price(BigDecimal.valueOf(100.0)).quantity(2).order(order).build(),
+                OrderLineItems.builder().orderLineItemsId(123L).skuCode("SKU2").price(BigDecimal.valueOf(200.0)).quantity(2).order(order).build()));
 
         when(orderService.createOrder(request)).thenReturn(order);
         when(orderService.extractSkuCodes(order)).thenReturn(List.of("SKU1", "SKU2"));
@@ -120,6 +125,7 @@ public class OrderProcessingServiceKafkaIT {
                 records.iterator().next();
 
         assertEquals("ORDER-123", record.value().orderNumber());
+        assertEquals("SKU1", record.value().items().get(0).skuCode());
 
     }
 

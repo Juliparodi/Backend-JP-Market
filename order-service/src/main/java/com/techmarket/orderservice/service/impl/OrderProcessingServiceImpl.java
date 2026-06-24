@@ -13,7 +13,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 @Service
@@ -64,7 +63,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
         }
     }
 
-    private void sendEvent(OrderPlacedEvent event) throws ExecutionException, InterruptedException {
+    private void sendEvent(OrderPlacedEvent event) {
 
         kafkaTemplate.send("orderTopic", event.orderNumber(), event)
                 .whenComplete((result, ex) -> {

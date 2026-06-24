@@ -98,17 +98,16 @@ public class ProductServiceImplTest {
   @Test
   void getAllProducts_shouldReturnMappedDTOList() {
     // Given
-    Product product = Product.builder()
+    ProductWithCategoryDTO product = ProductWithCategoryDTO.builder()
         .name("Shoes")
         .nameWithDetail("Running Shoes")
         .stock(10)
         .price(new BigDecimal("49.99"))
-        .category(categoryId)
+        .category(Category.builder().name("CLOTHING").build())
         .img("shoes.jpg")
         .build();
 
-    when(productRepository.findAll()).thenReturn(List.of(product));
-    when(productMapper.mapToProductResponse(List.of(product))).thenReturn(List.of(productDto));
+    when(productRepository.findAllWithCategory()).thenReturn(List.of(product));
 
     // When
     List<ProductWithCategoryDTO> result = productService.getAllProducts();
@@ -116,11 +115,11 @@ public class ProductServiceImplTest {
     // Then
     assertEquals(1, result.size());
     ProductWithCategoryDTO dto = result.get(0);
-    assertEquals("Shirt", dto.getName());
-    assertEquals("Cotton Shirt", dto.getNameWithDetail());
+    assertEquals("Shoes", dto.getName());
+    assertEquals("Running Shoes", dto.getNameWithDetail());
     assertEquals("CLOTHING", dto.getCategory().getName());
-    assertEquals(20, dto.getStock());
-    assertEquals(new BigDecimal("29.99"), dto.getPrice());
-    assertEquals("img-url.jpg", dto.getImg());
+    assertEquals(10, dto.getStock());
+    assertEquals(new BigDecimal("49.99"), dto.getPrice());
+    assertEquals("shoes.jpg", dto.getImg());
   }
 }

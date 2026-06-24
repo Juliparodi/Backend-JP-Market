@@ -110,7 +110,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-      - ./postgres-order:/data/postgres
+      - ./postgres-inventory:/data/postgres
     expose:
       - "5431"
     ports:

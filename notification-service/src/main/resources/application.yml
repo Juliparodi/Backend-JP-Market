@@ -38,7 +38,10 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
         properties:
-          spring.json.trusted.packages: "org.techmarket.event"
+          spring:
+            json:
+              trusted:
+                packages: org.techmarket.event
     bootstrap-servers: localhost:29092
   mail:
     host: localhost

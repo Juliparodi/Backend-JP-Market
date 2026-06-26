@@ -46,7 +46,7 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 
         spring.json.trusted.packages: "*"
-        spring.json.type.mapping: event:org.techmarket.event.OrderPlacedEvent
+        spring.json.type.mapping: event:com.techmarket.orderservice.domain.event.OrderPlacedEvent
   mail:
     host: localhost
     username: techmarketJP@gmail.com

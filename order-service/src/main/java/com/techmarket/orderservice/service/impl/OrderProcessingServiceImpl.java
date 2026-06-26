@@ -65,7 +65,7 @@ public class OrderProcessingServiceImpl implements IOrderProcessingService {
 
     private void sendEvent(OrderPlacedEvent event) {
 
-        kafkaTemplate.send("orderTopic", event.orderNumber(), event)
+        kafkaTemplate.send("orderTopic", event.getOrderNumber(), event)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("Kafka send failed", ex);

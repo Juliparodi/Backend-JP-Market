@@ -124,8 +124,8 @@ public class OrderProcessingServiceKafkaIT {
         ConsumerRecord<String, OrderPlacedEvent> record =
                 records.iterator().next();
 
-        assertEquals("ORDER-123", record.value().orderNumber());
-        assertEquals("SKU1", record.value().items().get(0).skuCode());
+        assertEquals("ORDER-123", record.value().getOrderNumber());
+        assertEquals("SKU1", record.value().getItems().get(0).getSkuCode());
 
     }
 

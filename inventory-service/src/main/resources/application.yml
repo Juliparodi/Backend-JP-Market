@@ -8,7 +8,6 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        schema.registry.url: http://localhost:8081
         specific.avro.reader: true
     bootstrap-servers: localhost:29092
   datasource:

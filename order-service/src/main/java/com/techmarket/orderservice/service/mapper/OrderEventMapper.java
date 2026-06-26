@@ -23,7 +23,7 @@ public class OrderEventMapper {
                 order.getOrderId(),
                 order.getOrderNumber(),
                 order.getCreatedDate(),
-                items
+                java.util.List.copyOf(items)
         );
     }
 

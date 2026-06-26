@@ -47,7 +47,7 @@ spring:
         # 1. Ignore the producer's class header
         spring.json.use.type.headers: false
         # 2. Force it to deserialize into your consumer's class
-        spring.json.value.default.type: "org.techmarket.event"
+        spring.json.value.default.type: "org.techmarket.event.OrderPlacedEvent"
         spring.json.trusted.packages: "*"
   mail:
     host: localhost

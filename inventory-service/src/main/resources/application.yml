@@ -17,8 +17,10 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 
         spring.json.trusted.packages: "*"
-        spring.json.type.mapping: event:com.techmarket.orderservice.domain.event.OrderPlacedEvent
-
+        # 1. Ignore the producer's class header
+        spring.json.use.type.headers: false
+        # 2. Force it to deserialize into your consumer's class
+        spring.json.value.default.type: "com.techmarket.inventoryservice.domain.event"
   datasource:
     driver-class-name: org.postgresql.Driver
     username: juliparodi

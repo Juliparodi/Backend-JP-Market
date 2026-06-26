@@ -96,7 +96,7 @@ public class InitializeData {
             .name(name)
             .nameWithDetail(detail)
             .category(categoryId)
-            .stock(25)
+            .stock(3)
             .price(BigDecimal.valueOf(price))
             .img(img)
             .variations(variations)

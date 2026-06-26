@@ -44,7 +44,7 @@ public class InitializeData {
 			String sku = "SKU-" + name.toUpperCase().replace(" ", "-");
 			Inventory inv = Inventory.builder()
 					.skuCode(sku)
-					.quantity(1)
+					.quantity(3)
 					.build();
 			inventories.add(inv);
 		}

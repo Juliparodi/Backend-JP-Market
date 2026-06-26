@@ -44,9 +44,9 @@ spring:
       properties:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
-        # 1. Ignore the producer's class header
+        # Ignore the producer's class header
         spring.json.use.type.headers: false
-        # 2. Force it to deserialize into your consumer's class
+        # 2. Force it to deserialize in consumer class
         spring.json.value.default.type: "org.techmarket.event.OrderPlacedEvent"
         spring.json.trusted.packages: "*"
   mail:

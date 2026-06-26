@@ -35,16 +35,15 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   kafka:
     producer:
+      client-id: order-service-producer
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
-      properties:
-        spring:
-          json:
-            type:
-              mapping: event:com.techmarket.orderservice.event.OrderPlacedEvent
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
     template:
       default-topic: orderTopic
     bootstrap-servers: localhost:29092
+
   flyway:
     enabled: true
     locations: classpath:db

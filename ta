@@ -1,0 +1,24 @@
+[1mdiff --git a/order-service/src/main/resources/application.yml b/order-service/src/main/resources/application.yml[m
+[1mindex d22fec8..5872eb5 100644[m
+[1m--- a/order-service/src/main/resources/application.yml[m
+[1m+++ b/order-service/src/main/resources/application.yml[m
+[36m@@ -35,16 +35,13 @@[m [mspring:[m
+     database-platform: org.hibernate.dialect.MySQLDialect[m
+   kafka:[m
+     producer:[m
+[32m+[m[32m      client-id: order-service-producer[m
+       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer[m
+[31m-      properties:[m
+[31m-        spring:[m
+[31m-          json:[m
+[31m-            type:[m
+[31m-              mapping: event:com.techmarket.orderservice.event.OrderPlacedEvent[m
+       key-serializer: org.apache.kafka.common.serialization.StringSerializer[m
+[32m+[m[32m      properties:[m
+[32m+[m[32m        enable.idempotence: true[m
+     template:[m
+       default-topic: orderTopic[m
+[31m-    bootstrap-servers: localhost:29092[m
+   flyway:[m
+     enabled: true[m
+     locations: classpath:db[m

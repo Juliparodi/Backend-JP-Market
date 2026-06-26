@@ -36,10 +36,11 @@ spring:
   kafka:
     producer:
       client-id: order-service-producer
-      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
         enable.idempotence: true
+        spring.json.add.type.headers: false
     template:
       default-topic: orderTopic
   flyway:

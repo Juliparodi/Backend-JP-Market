@@ -40,6 +40,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
         enable.idempotence: true
+        spring.json.type.mapping: event:com.techmarket.orderservice.domain.event.OrderPlacedEvent
+        spring.json.add.type.headers: true
     template:
       default-topic: orderTopic
     bootstrap-servers: localhost:29092

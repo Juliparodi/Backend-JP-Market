@@ -37,7 +37,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
-        specific.avro.reader: true
+        properties:
+          spring.json.trusted.packages: "org.techmarket.event"
     bootstrap-servers: localhost:29092
   mail:
     host: localhost

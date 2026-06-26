@@ -33,5 +33,7 @@ spring:
     uri: mongodb+srv://julianparodi19:${MONGO_PASSWORD}@jpmarket.djj41xn.mongodb.net/jpmarket?retryWrites=true&w=majority&sslVerifyCertificate=false
   application:
     name: product-service
+  cache:
+    type: caffeine
 server:
   port: 8082

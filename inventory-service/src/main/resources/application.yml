@@ -1,18 +1,24 @@
 spring:
   kafka:
+    bootstrap-servers: localhost:29092
+
     template:
       default-topic: orderTopic
+
     consumer:
-      auto-offset-reset: earliest
       group-id: inventory-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      auto-offset-reset: earliest
+
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
       properties:
-        spring:
-          json:
-            trusted:
-              packages: com.techmarket.inventoryservice.domain.event
-    bootstrap-servers: localhost:29092
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+
+        spring.json.trusted.packages: com.techmarket.inventoryservice.domain.event
+        spring.json.use.type.headers: false
+
   datasource:
     driver-class-name: org.postgresql.Driver
     username: juliparodi

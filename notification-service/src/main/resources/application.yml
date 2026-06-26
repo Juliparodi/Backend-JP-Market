@@ -29,20 +29,24 @@ management:
       probability: '1.0'
 spring:
   kafka:
+    bootstrap-servers: localhost:29092
+
     template:
       default-topic: orderTopic
+
     consumer:
-      auto-offset-reset: earliest
       group-id: notification-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      auto-offset-reset: earliest
+
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
       properties:
-        properties:
-          spring:
-            json:
-              trusted:
-                packages: org.techmarket.event
-    bootstrap-servers: localhost:29092
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+
+        spring.json.trusted.packages: org.techmarket.event
+        spring.json.use.type.headers: false
   mail:
     host: localhost
     username: techmarketJP@gmail.com

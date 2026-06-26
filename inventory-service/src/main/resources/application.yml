@@ -16,7 +16,7 @@ spring:
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 
-        spring.json.trusted.packages: *
+        spring.json.trusted.packages: "*"
 
   datasource:
     driver-class-name: org.postgresql.Driver

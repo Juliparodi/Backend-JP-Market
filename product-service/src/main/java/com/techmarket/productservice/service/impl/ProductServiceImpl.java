@@ -9,10 +9,11 @@ import com.techmarket.productservice.model.entities.Product;
 import com.techmarket.productservice.repository.CategoryRepository;
 import com.techmarket.productservice.repository.ProductRepository;
 import com.techmarket.productservice.service.IProductService;
-import com.techmarket.productservice.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bson.types.ObjectId;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +26,8 @@ public class ProductServiceImpl implements IProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductMapper productMapper;
 
-
+    @CacheEvict(value = "products", allEntries = true)
     public void createProduct(ProductDTO productRequest) {
         Category category =
                 categoryRepository
@@ -51,6 +51,7 @@ public class ProductServiceImpl implements IProductService {
         productRepository.save(product);
     }
 
+    @Cacheable("products")
     public List<ProductWithCategoryDTO> getAllProducts() {
         return productRepository.findAllWithCategory();
     }
@@ -70,6 +71,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public void updateProduct(String id, ProductDTO productRequest) {
         Product existingProduct = productRepository.findById(new ObjectId(id))
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
@@ -88,6 +90,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(String id) {
         if (!productRepository.existsById(new ObjectId(id))) {
             throw new ProductNotFoundException("Product not found with id: " + id);

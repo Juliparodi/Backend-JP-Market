@@ -17,7 +17,6 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 
         spring.json.trusted.packages: com.techmarket.inventoryservice.domain.event
-        spring.json.use.type.headers: false
 
   datasource:
     driver-class-name: org.postgresql.Driver

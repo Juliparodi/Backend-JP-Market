@@ -46,7 +46,6 @@ spring:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
 
         spring.json.trusted.packages: org.techmarket.event
-        spring.json.use.type.headers: false
   mail:
     host: localhost
     username: techmarketJP@gmail.com

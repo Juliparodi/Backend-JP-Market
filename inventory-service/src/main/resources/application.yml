@@ -6,7 +6,7 @@ spring:
       auto-offset-reset: earliest
       group-id: inventory-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       properties:
         specific.avro.reader: true
     bootstrap-servers: localhost:29092

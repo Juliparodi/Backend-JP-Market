@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: ai-ops-agent
+  ai:
+    openai:
+      base-url: https://openrouter.ai/api/v1
+      api-key: ${OPENAI_ROUTER_KEY}
+      chat:
+        model: qwen/qwen3-8b
+        temperature: 0.2

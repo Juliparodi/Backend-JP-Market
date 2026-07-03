@@ -13,6 +13,10 @@ management:
       export:
         url: http://localhost:4318/v1/metrics
   opentelemetry:
+    logging:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/logs
     tracing:
       export:
         otlp:

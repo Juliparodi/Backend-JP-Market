@@ -1,0 +1,91 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    height:100vh;
+}
+
+.container{
+    width:900px;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+
+header{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:20px;
+    border-bottom:1px solid #334155;
+}
+
+.logo{
+    font-size:40px;
+}
+
+header p{
+    color:#94a3b8;
+}
+
+.messages{
+    flex:1;
+    overflow:auto;
+    padding:30px;
+}
+
+.user,
+.assistant{
+    max-width:70%;
+    margin-bottom:20px;
+    padding:15px;
+    border-radius:10px;
+    line-height:1.5;
+}
+
+.user{
+    margin-left:auto;
+    background:#2563eb;
+}
+
+.assistant{
+    background:#1e293b;
+}
+
+footer{
+    display:flex;
+    gap:10px;
+    padding:20px;
+    border-top:1px solid #334155;
+}
+
+textarea{
+    flex:1;
+    resize:none;
+    border:none;
+    border-radius:10px;
+    padding:15px;
+    font-size:15px;
+    height:70px;
+}
+
+button{
+    width:130px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}

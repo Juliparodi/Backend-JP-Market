@@ -66,4 +66,4 @@ spring:
   application:
     name: notification-service
 server:
-  port: '0'
+  port: '8087'

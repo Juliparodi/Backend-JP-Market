@@ -1,0 +1,12 @@
+jpmarket:
+  services:
+    notification:
+      base-url: http://notification-service:8087
+    order:
+      base-url: http://order-service:8081
+    inventory:
+      base-url: http://inventory-service:8083
+    product:
+        base-url: http://product-service:8082
+    gateway:
+        base-url: http://api-gateway:8084

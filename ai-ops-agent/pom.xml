@@ -9,7 +9,6 @@
     </parent>
     <groupId>com.jpmarket</groupId>
     <artifactId>ai-ops-agent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>ai-ops-agent</name>
     <description>ai-ops-agent</description>
     <url/>
@@ -28,6 +27,7 @@
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
+        <java.version>21</java.version>
         <spring-ai.version>2.0.0</spring-ai.version>
     </properties>
     <dependencies>

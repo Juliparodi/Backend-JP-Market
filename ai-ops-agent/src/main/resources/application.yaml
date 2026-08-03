@@ -20,3 +20,5 @@ jpmarket:
       base-url: http://localhost:8082
     gateway:
       base-url: http://localhost:8084
+  prometheus:
+    base-url: http://localhost:9090

@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: ai-ops-agent-test
+  ai:
+    openai:
+      api-key: test-key
+      chat:
+        options:
+          model: gpt-4o-mini
+jpmarket:
+  services:
+    order:
+      base-url: http://localhost:9999
+    product:
+      base-url: http://localhost:9998
+    inventory:
+      base-url: http://localhost:9997
+    notification:
+      base-url: http://localhost:9996
+    gateway:
+      base-url: http://localhost:9995
+  prometheus:
+    base-url: http://localhost:9090
+  github:
+    api:
+      url: http://localhost:8080
+      token: test-token
+      owner: juliparodi
+      repo: Backend-JP-Market

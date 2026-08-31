@@ -22,3 +22,9 @@ jpmarket:
       base-url: http://localhost:8084
   prometheus:
     base-url: http://localhost:9090
+  github:
+    api:
+      url: https://api.github.com
+      token: ${GITHUB_TOKEN}
+      owner: juliparodi
+      repo: Backend-JP-Market
